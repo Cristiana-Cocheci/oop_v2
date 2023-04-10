@@ -2,9 +2,8 @@
 
 ### Tema 0
 
-- [ ] Nume proiect (poate fi schimbat ulterior)
-- [ ] Scurtă descriere a temei alese, ce v-ați propus să implementați
-
+- [ ] Nume proiect : Cross the road
+- [ ] Joculet in care incerci sa treci strada, fara sa te calce masinile.
 ## Tema 1
 
 #### Cerințe
