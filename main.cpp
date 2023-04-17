@@ -35,7 +35,8 @@ public:
 
     //operator <<
     friend std::ostream& operator<<(std::ostream& out, const Lane& l){
-        out<<"Afisare banda"<<"\n";
+        out<<"Afisare dimensiune banda: ";
+        out<<l.cars.size()<<"\n";
         return out;
     }
 };
