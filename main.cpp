@@ -1,10 +1,10 @@
 #include <bits/stdc++.h>
 #include <rlutil.h>
 #include <time.h>
-
+/*
 class Car{
 
-};
+};*/
 class Lane
 {
 private:
@@ -33,7 +33,7 @@ public:
 
     //operator <<
     friend std::ostream& operator<<(std::ostream& out, const Lane& l){
-        out<<"Afisare banda"<<"\n";
+        out<<"Afisare banda"<<"\n"<<l;
         return out;
     }
 };
@@ -42,7 +42,7 @@ private:
     int x,y, noLanes, mapWidth;
 public:
     Player(int width=20, int height=10){x=width/2;y=0, noLanes=height, mapWidth=width;}
-    Player(const Player& other): x(other.x),y(other.y){};
+    Player(const Player& other): x(other.x),y(other.y), noLanes(other.noLanes), mapWidth(other.mapWidth){};
     Player& operator=(const Player& other)
     {
         x=other.x;
@@ -159,7 +159,7 @@ public:
 };
 
 int main() {
-    srand(time(NULL));
+    srand(time(nullptr));
     Game joc(30,5);
     joc.run();
     return 0;
