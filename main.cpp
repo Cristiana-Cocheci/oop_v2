@@ -10,7 +10,7 @@ class Lane
 private:
     std::deque<bool> cars;
 public:
-    Lane(int width)
+    Lane(int width=20)
     {
         for(int i=0; i<width;i++)
         {
