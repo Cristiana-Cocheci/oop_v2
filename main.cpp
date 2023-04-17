@@ -35,7 +35,7 @@ public:
 
     //operator <<
     friend std::ostream& operator<<(std::ostream& out, const Lane& l){
-        out<<"Afisare banda"<<"\n"<<l;
+        out<<"Afisare banda"<<"\n";
         return out;
     }
 };
