@@ -47,6 +47,8 @@ public:
     {
         x=other.x;
         y=other.y;
+        noLanes=other.noLanes;
+        mapWidth=other.mapWidth;
         return *this;
     }
     ~Player(){}
