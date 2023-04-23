@@ -122,7 +122,7 @@ public:
     }
     void input()
     {
-        if(kbhit())
+        /*if(kbhit())
         {
             char current = getch();
             if(current=='a'){player.MoveLeft();}
@@ -130,7 +130,13 @@ public:
             if(current=='s'){player.MoveUp();}
             if(current=='d'){player.MoveRight();}
             if(current=='q'){quit=true;}
-        }
+        }*/
+        char current = std::tolower(rlutil::nb_getch());
+        if(current=='a'){player.MoveLeft();}
+        if(current=='w'){player.MoveDown();}
+        if(current=='s'){player.MoveUp();}
+        if(current=='d'){player.MoveRight();}
+        if(current=='q'){quit=true;}
     }
     void logic(){
         for(int i=1;i<noLanes-1;i++)
