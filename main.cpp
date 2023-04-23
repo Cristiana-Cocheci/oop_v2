@@ -126,8 +126,8 @@ public:
         {
             char current = getch();
             if(current=='a'){player.MoveLeft();}
-            if(current=='w'){player.MoveUp();}
-            if(current=='s'){player.MoveDown();}
+            if(current=='w'){player.MoveDown();}
+            if(current=='s'){player.MoveUp();}
             if(current=='d'){player.MoveRight();}
             if(current=='q'){quit=true;}
         }
@@ -159,6 +159,7 @@ public:
             input();
             draw();
             logic();
+            rlutil::msleep(100);
         }
     }
 };
