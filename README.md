@@ -3,7 +3,7 @@
 ### Tema 0
 
 - [ ] Cross the road
-- [ ] Scurtă descriere a temei alese, ce v-ați propus să implementați
+- [ ] Traverseaza strada fara sa te calce masinile.
 
 ## Tema 1
 
