@@ -318,7 +318,6 @@ public:
             }
         }
         while(ok);
-
         Game joc(w,h);
         std::cout<<"when you think you're ready, type start and enter";
         std::string aux;
