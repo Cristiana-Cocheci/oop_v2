@@ -107,6 +107,8 @@ public:
     Booster(int _x, int _y,int _noLanes, int _mapWidth): x(_x),y(_y), noLanes(_noLanes), mapWidth(_mapWidth){};
     virtual int getX() const{return x;}
     virtual int getY() const{return y;}
+    //virtual void use()=0;
+    //virtual std::string type()=0;
 };
 class Coin: public Booster
 {
@@ -114,13 +116,7 @@ private:
     std::string name;
     int value;
 public:
-    /*Coin(std::string _name,int _x,int _y,int _noLanes, int _mapWidth):Booster(_x,_y,_noLanes,_mapWidth){
-        name=_name;
-        if(_name=="gold"){value=3;}
-        else if(name=="silver"){value=2;}
-        else if(name=="rusty"){value=-1;}
-    }*/
-    Coin(std::string _name, int _noLanes, int _mapWidth):Booster(rand()%_mapWidth,rand()%_noLanes,_noLanes,_mapWidth){
+    Coin(std::string _name, int _noLanes, int _mapWidth):Booster(rand()%(_mapWidth-1)+1,rand()%(_noLanes-1)+1,_noLanes,_mapWidth){
         if(_name=="special"){
             int chance=rand()%10;
             if(chance<5){name="silver";} //50% sanse sa fie siver coin
@@ -143,6 +139,9 @@ public:
         value=other.value;
         return *this;
     }
+    //void use() override{}
+    //int get_value(){return value;}
+    //std::string type()override{return "coin";}
 };
 /*
 class Token: public Booster
@@ -193,6 +192,7 @@ private:
     Player player;
     ///Coin special_coin= Coin("special", noLanes, mapWidth);
     std::vector <std::shared_ptr<Lane>> map;
+    std::vector <std::shared_ptr<Booster>> boosters;
 public:
     Game(int w=20, int h=10, std::string pn="unknown", int score_=0, int coins_=0)
     {
@@ -202,7 +202,6 @@ public:
         mapWidth=w;
         quit=false;
         coins=coins_;
-        //map=std::vector<Lane>(h);
 
         for(int i=0;i<noLanes;i++) {
 
@@ -219,7 +218,16 @@ public:
             }
         }
         player= Player(mapWidth, noLanes);
-
+        int no_boosters= (int) 1.8*noLanes;
+        rlutil::setColor(rlutil::BROWN);
+        std::cerr<<no_boosters;
+        for(int i=0;i<no_boosters;i++){
+            std::string coin_type;
+            if(i%5==0){coin_type="special";}
+            else{coin_type="gold";}
+            boosters.push_back(std::make_shared<Coin>(coin_type,noLanes,mapWidth));
+            std::cerr<<boosters[i]->getY()<<" "<<boosters[i]->getX()<<" "<<"\n";
+        }
     }
     //operator <<
     friend std::ostream& operator<<(std::ostream& out, const Game& g){
@@ -258,7 +266,14 @@ public:
                     std::cout << "P ";
                     rlutil::setColor(rlutil::LIGHTBLUE);
                 }
-
+                //afisare_booster
+                for(int q=0;q<boosters.size();q++){
+                    if(boosters[q]->getX()==j && boosters[q]->getY()==i){
+                        rlutil::setColor(rlutil::WHITE);
+                        std::cout << "* ";
+                        rlutil::setColor(rlutil::LIGHTBLUE);
+                    }
+                }
             }
             std::cout<<"\n";
         }
@@ -288,7 +303,6 @@ public:
         {
             score++;
             player.reset();
-            ///special_coin=Coin("special", noLanes, mapWidth);
         }
     }
     void run()
@@ -321,7 +335,7 @@ public:
         std::cin>>player_name;
         rlutil::setColor(rlutil::LIGHTCYAN);
         std::cout<<"ok, "<<player_name<<", you now have to pick the shape of your street\n";
-        std::cout<<"choose two numbers between 3 and 20 for your street's width and height\n";
+        std::cout<<"choose two numbers between 6 and 20 for your street's width and height\n";
         bool ok;
         do{
             ok=0;
@@ -330,7 +344,7 @@ public:
             std::cout<<"height=";
             h=citire_int();
             try{
-                if(!(w>=3 && w<=20) || !(h>=3 && h<=20))
+                if(!(w>=6 && w<=20) || !(h>=6 && h<=20))
                 {
                     throw eroare_dimensiuni("Dimensiuni gresite!!");
                 }
