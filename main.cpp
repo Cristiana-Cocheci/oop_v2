@@ -3,43 +3,136 @@
 #include <deque>
 #include <rlutil.h>
 #include <ctime>
-/*
-class Car{
 
-};*/
+
 class Lane
 {
-private:
-    std::deque<bool> cars;
+protected:
+    std::deque<int> cars; // 0=gol, 1=masina, 3=feelane -nu
+    int direction=rand()%2;
 public:
     Lane(int width=20)
     {
         for(int i=0; i<width;i++)
         {
-            cars.push_front(false);
+            cars.push_front(0);
         }
     }
-    void move()
-    {
+    virtual void move(){
+        int c; //masina ==1
         if(rand()%10==1) //10% sanse sa intre o masina pe drum
-        {
-            cars.push_front(true);
-        }
+            c=1;
         else
-        {
-            cars.push_front(false);
+            c=0;
+        if(direction==0){ //stanga-dreapta
+            cars.push_front(c);
+            cars.pop_back();
         }
-        cars.pop_back();
-    }
-    bool trackPosition(int pos){return cars[pos];}
+        else { //dreapta-stanga
+            cars.push_back(c);
+            cars.pop_front();
+        }
 
-    //operator <<
+    }
+    int trackPosition(int pos){return cars[pos];}
     friend std::ostream& operator<<(std::ostream& out, const Lane& l){
         out<<"Afisare dimensiune banda: ";
         out<<l.cars.size()<<"\n";
         return out;
     }
+    virtual ~Lane(){}
 };
+class fastLane : public Lane
+{
+public:
+    fastLane(int _width):Lane(_width){};
+    void move() override{
+        int c; //masina
+        if(rand()%10==0) //10% sanse sa intre o masina de dimensiune 3 pe drum, practic se misca mai repede lane-ul
+            c=1;
+        else
+            c=0;
+        if(direction==0){ //stanga-dreapta
+            for(int aux=0;aux<3;aux++){
+                cars.push_front(c);
+                cars.pop_back();
+            }
+        }
+        else { //dreapta-stanga
+            for(int aux=0;aux<3;aux++) {
+                cars.push_back(c);
+                cars.pop_front();
+            }
+        }
+
+    }
+};
+
+class freeLane : public Lane
+{
+public:
+    using Lane::Lane;
+    //freeLane(int _width):Lane(_width){};
+    void move() override{
+        //nimic
+        cars.push_back(3);
+        cars.pop_front();
+    }
+};
+
+
+class Booster
+{
+protected:
+    int x,y,noLanes, mapWidth;
+public:
+    Booster(int _x, int _y,int _noLanes, int _mapWidth): x(_x),y(_y), noLanes(_noLanes), mapWidth(_mapWidth){};
+    virtual int getX() const{return x;}
+    virtual int getY() const{return y;}
+};
+class Coin: public Booster
+{
+private:
+    std::string name;
+    int value;
+public:
+    /*Coin(std::string _name,int _x,int _y,int _noLanes, int _mapWidth):Booster(_x,_y,_noLanes,_mapWidth){
+        name=_name;
+        if(_name=="gold"){value=3;}
+        else if(name=="silver"){value=2;}
+        else if(name=="rusty"){value=-1;}
+    }*/
+    Coin(std::string _name, int _noLanes, int _mapWidth):Booster(rand()%_mapWidth,rand()%_noLanes,_noLanes,_mapWidth){
+        if(_name=="special"){
+            int chance=rand()%10;
+            if(chance<5){name="silver";} //50% sanse sa fie siver coin
+            else if(chance<8){name="gold";} //30% sanse sa fie gold coin
+            else{name="rusty";}//20% sanse sa fie rusty coin
+        }
+        else{name=_name;}
+        if(name=="gold"){value=3;}
+        else if(name=="silver"){value=2;}
+        else if(name=="rusty"){value=-1;}
+
+    }
+    Coin& operator=(const Coin& other) {
+        std::cout << "op=coin\n";
+        x = other.x;
+        y = other.y;
+        noLanes = other.noLanes;
+        mapWidth = other.mapWidth;
+        name=other.name;
+        value=other.value;
+        return *this;
+    }
+};
+/*
+class Token: public Booster
+{
+public:
+
+};*/
+
 class Player{
 private:
     int x,y, noLanes, mapWidth;
@@ -77,19 +170,33 @@ private:
     int noLanes;
     int mapWidth;
     int score;
+    int coins;
     Player player;
-    std::vector <Lane> map;
+    ///Coin special_coin= Coin("special", noLanes, mapWidth);
+    std::vector <Lane*> map;
 public:
-    Game(int w=20, int h=10, int score_=0)
+    Game(int w=20, int h=10, int score_=0, int coins_=0)
     {
         score=score_;
         noLanes=h;
         mapWidth=w;
         quit=false;
+        coins=coins_;
         //map=std::vector<Lane>(h);
 
         for(int i=0;i<noLanes;i++) {
-            map.push_back(Lane(mapWidth));
+
+            if(i%27==3 || i%27==17) { //
+                fastLane *fl= new fastLane(mapWidth);
+                map.push_back(fl);
+            }
+            if(i%27==1 || i%27==14){
+                freeLane *free= new freeLane(mapWidth);
+                map.push_back(free);
+            }
+            else {
+                map.push_back(new Lane(mapWidth));
+            }
         }
         player= Player(mapWidth, noLanes);
 
@@ -110,12 +217,15 @@ public:
                 if(i==0 && (j==0 || j==mapWidth-1)){std::cout<<"-";}
                 if(i==0 && (j==1 || j==mapWidth-2)){std::cout<<"S";}
                 if(i==noLanes-1 && (j==0 || j==mapWidth-1)){std::cout<<"F";}
-                if(map[i].trackPosition(j) && i>0 && i<noLanes-1)
-                { std::cout << "c "; }
-                else if(player.getX()==j && player.getY()==i)
-                { std::cout <<"P "; }
+                if(map[i]->trackPosition(j)==1 && i>0 && i<noLanes-1)
+                { std::cout << "<>"; }
+                else if(map[i]->trackPosition(j)==3 && i>0 && i<noLanes-1)//freelane
+                { std::cout<<"__";}
                 else
-                { std::cout<<" "; }
+                { std::cout<<"  "; }
+                if(player.getX()==j && player.getY()==i)
+                { std::cout <<"P "; }
+
             }
             std::cout<<"\n";
         }
@@ -123,15 +233,6 @@ public:
     }
     void input()
     {
-        /*if(kbhit())
-        {
-            char current = getch();
-            if(current=='a'){player.MoveLeft();}
-            if(current=='w'){player.MoveDown();}
-            if(current=='s'){player.MoveUp();}
-            if(current=='d'){player.MoveRight();}
-            if(current=='q'){quit=true;}
-        }*/
         char current = std::tolower(rlutil::nb_getch());
         if(current=='a'){player.MoveLeft();}
         if(current=='w'){player.MoveDown();}
@@ -142,11 +243,9 @@ public:
     void logic(){
         for(int i=1;i<noLanes-1;i++)
         {
-            if(std::rand()%10==1)
-            {
-                map[i].move();
-            }
-            if(map[i].trackPosition(player.getX()) && player.getY()==i) {
+            if(std::rand()%3==0) //sansele sa se miste lane ul
+                map[i]->move();
+            if(map[i]->trackPosition(player.getX())==1 && player.getY()==i) {
                 quit = true;
                 std::cout << "YOU LOSE ;-(\n";
             }
@@ -157,6 +256,7 @@ public:
             std::cout<< "YOU WIN!!!!\n";*/
             score++;
             player.reset();
+            ///special_coin=Coin("special", noLanes, mapWidth);
         }
     }
     void run()
@@ -171,9 +271,31 @@ public:
     }
 };
 
+class Meniu{
+private:
+    int w,h;
+    std::string player_name;
+public:
+    void start(){
+        std::cout<<"hello there, what is your name?";
+        std::cin>>player_name;
+        std::cout<<"ok, "<<player_name<<", you now have to pick the shape of your street\n";
+        std::cout<<"choose two numbers between 3 and 20 for your street's width and height";
+        std::cin>>w>>h;
+        Game joc(w,h);
+        std::cout<<"when you think you're ready, type start and enter";
+        std::string aux;
+        std::cin>> aux;
+        joc.run();
+    }
+
+};
+
+
 int main() {
+
     srand(time(nullptr));
-    Game joc(30,5);
-    joc.run();
+    Meniu m;
+    m.start();
     return 0;
 }
