@@ -116,7 +116,7 @@ private:
     std::string name;
     int value;
 public:
-    Coin(std::string _name, int _noLanes, int _mapWidth):Booster(rand()%(_mapWidth-1)+1,rand()%(_noLanes-1)+1,_noLanes,_mapWidth){
+    Coin(const std::string _name, int _noLanes, int _mapWidth):Booster(rand()%(_mapWidth-1)+1,rand()%(_noLanes-1)+1,_noLanes,_mapWidth){
         if(_name=="special"){
             int chance=rand()%10;
             if(chance<5){name="silver";} //50% sanse sa fie siver coin
@@ -194,14 +194,10 @@ private:
     std::vector <std::shared_ptr<Lane>> map;
     std::vector <std::shared_ptr<Booster>> boosters;
 public:
-    Game(int w=20, int h=10, std::string pn="unknown", int score_=0, int coins_=0)
+    Game(int w=20, int h=10, const std::string pn="unknown", int score_=0, int coins_=0)
+        :player_name(pn), score(score_), noLanes(h), mapWidth(w), quit(false), coins(coins_)
     {
-        player_name=pn;
-        score=score_;
-        noLanes=h;
-        mapWidth=w;
-        quit=false;
-        coins=coins_;
+
 
         for(int i=0;i<noLanes;i++) {
 
@@ -265,6 +261,11 @@ public:
                     rlutil::setColor(rlutil::BLUE);
                     std::cout << "P ";
                     rlutil::setColor(rlutil::LIGHTBLUE);
+                    for(int q=0;q<boosters.size();q++){
+                        if(boosters[q]->getX()==j && boosters[q]->getY()==i){
+
+                        }
+                    }
                 }
                 //afisare_booster
                 for(int q=0;q<boosters.size();q++){
@@ -327,7 +328,7 @@ public:
         std::cin>>a;
         return a;
     }
-
+    Meniu(){}
     void start(){
         rlutil::setColor(rlutil::LIGHTCYAN);
         std::cout<<"hello there, what is your name?\n";
