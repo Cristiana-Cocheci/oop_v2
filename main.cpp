@@ -3,6 +3,7 @@
 #include <deque>
 #include <rlutil.h>
 #include <ctime>
+#include <memory>
 
 
 class Lane
@@ -173,7 +174,7 @@ private:
     int coins;
     Player player;
     ///Coin special_coin= Coin("special", noLanes, mapWidth);
-    std::vector <Lane*> map;
+    std::vector <std::shared_ptr<Lane>> map;
 public:
     Game(int w=20, int h=10, int score_=0, int coins_=0)
     {
@@ -187,15 +188,15 @@ public:
         for(int i=0;i<noLanes;i++) {
 
             if(i%27==3 || i%27==17) { //
-                fastLane *fl= new fastLane(mapWidth);
-                map.push_back(fl);
+                //fastLane *fl= new fastLane(mapWidth);
+                map.push_back(std::make_shared<fastLane>(mapWidth));
             }
             if(i%27==1 || i%27==14){
-                freeLane *free= new freeLane(mapWidth);
-                map.push_back(free);
+                //freeLane *free= new freeLane(mapWidth);
+                map.push_back(std::make_shared<freeLane>(mapWidth));
             }
             else {
-                map.push_back(new Lane(mapWidth));
+                map.push_back(std::make_shared<Lane>(mapWidth));
             }
         }
         player= Player(mapWidth, noLanes);
