@@ -12,8 +12,11 @@ public:
 };
 class eroare_dimensiuni : public eroare_generala{
 public:
-    explicit eroare_dimensiuni(const std::string &err) noexcept: eroare_generala(err){
-    }
+    explicit eroare_dimensiuni(const std::string &err) noexcept: eroare_generala(err){}
+};
+class nu_incepem :public eroare_generala{
+public:
+    explicit nu_incepem(const std::string &err) noexcept: eroare_generala(err){}
 };
 
 class Lane
@@ -56,7 +59,8 @@ public:
 class fastLane : public Lane
 {
 public:
-    fastLane(int _width):Lane(_width){};
+    using Lane::Lane;
+    //fastLane(int _width):Lane(_width){};
     void move() override{
         int c; //masina
         if(rand()%10==0) //10% sanse sa intre o masina de dimensiune 3 pe drum, practic se misca mai repede lane-ul
@@ -82,12 +86,15 @@ public:
 class freeLane : public Lane
 {
 public:
-    using Lane::Lane;
-    //freeLane(int _width):Lane(_width){};
+    freeLane(int width=20){
+        for(int i=0; i<width;i++)
+        {
+            cars.push_front(3);
+        }
+    }
     void move() override{
         //nimic
-        cars.push_back(3);
-        cars.pop_front();
+        //sta pe loc
     }
 };
 
@@ -182,12 +189,14 @@ private:
     int mapWidth;
     int score;
     int coins;
+    std::string player_name;
     Player player;
     ///Coin special_coin= Coin("special", noLanes, mapWidth);
     std::vector <std::shared_ptr<Lane>> map;
 public:
-    Game(int w=20, int h=10, int score_=0, int coins_=0)
+    Game(int w=20, int h=10, std::string pn="unknown", int score_=0, int coins_=0)
     {
+        player_name=pn;
         score=score_;
         noLanes=h;
         mapWidth=w;
@@ -219,7 +228,8 @@ public:
     }
     void draw()
     {
-        /*system("cls");*/
+
+        rlutil::setColor(rlutil::LIGHTBLUE);
         rlutil::cls();
         for(int i=0; i<noLanes; i++)
         {
@@ -229,13 +239,25 @@ public:
                 if(i==0 && (j==1 || j==mapWidth-2)){std::cout<<"S";}
                 if(i==noLanes-1 && (j==0 || j==mapWidth-1)){std::cout<<"F";}
                 if(map[i]->trackPosition(j)==1 && i>0 && i<noLanes-1)
-                { std::cout << "<>"; }
+                {
+                    rlutil::setColor(rlutil::RED);
+                    std::cout << "<>";
+                    rlutil::setColor(rlutil::LIGHTBLUE);
+                }
                 else if(map[i]->trackPosition(j)==3 && i>0 && i<noLanes-1)//freelane
-                { std::cout<<"__";}
+                {
+                    rlutil::setColor(rlutil::LIGHTGREEN);
+                    std::cout << "__";
+                    rlutil::setColor(rlutil::LIGHTBLUE);
+                }
                 else
                 { std::cout<<"  "; }
                 if(player.getX()==j && player.getY()==i)
-                { std::cout <<"P "; }
+                {
+                    rlutil::setColor(rlutil::BLUE);
+                    std::cout << "P ";
+                    rlutil::setColor(rlutil::LIGHTBLUE);
+                }
 
             }
             std::cout<<"\n";
@@ -258,13 +280,12 @@ public:
                 map[i]->move();
             if(map[i]->trackPosition(player.getX())==1 && player.getY()==i) {
                 quit = true;
-                std::cout << "YOU LOSE ;-(\n";
+                rlutil::setColor(rlutil::LIGHTCYAN);
+                std::cout << "Sorry "<<player_name<<", but you lost ;-(\n";
             }
         }
         if(player.getY()==noLanes-1)
         {
-            /*quit=true;
-            std::cout<< "YOU WIN!!!!\n";*/
             score++;
             player.reset();
             ///special_coin=Coin("special", noLanes, mapWidth);
@@ -294,8 +315,11 @@ public:
     }
 
     void start(){
+        rlutil::setColor(rlutil::LIGHTCYAN);
         std::cout<<"hello there, what is your name?\n";
+        rlutil::setColor(rlutil::WHITE);
         std::cin>>player_name;
+        rlutil::setColor(rlutil::LIGHTCYAN);
         std::cout<<"ok, "<<player_name<<", you now have to pick the shape of your street\n";
         std::cout<<"choose two numbers between 3 and 20 for your street's width and height\n";
         bool ok;
@@ -318,10 +342,29 @@ public:
             }
         }
         while(ok);
-        Game joc(w,h);
-        std::cout<<"when you think you're ready, type start and enter";
-        std::string aux;
-        std::cin>> aux;
+
+        Game joc(w,h,player_name);
+        std::cout<<"when you think you're ready, type \"start\" and press enter.\n";
+        do{
+            ok=0;
+            std::string aux;
+            rlutil::setColor(rlutil::WHITE);
+            std::cin>> aux;
+            rlutil::setColor(rlutil::LIGHTCYAN);
+            try{
+                if(aux!="start"){
+                    throw nu_incepem("take your time !\nRemeber, to start type \"start\" and press enter!\n");
+                }
+            }
+            catch(nu_incepem &err){
+                std::cout<<err.what()<<"\n";
+                ok=1;
+            }
+
+
+        }
+        while(ok);
+
         joc.run();
     }
 
