@@ -4,7 +4,17 @@
 #include <rlutil.h>
 #include <ctime>
 #include <memory>
+#include <stdexcept>
 
+class eroare_generala : public std::logic_error{
+public:
+    explicit eroare_generala(const std::string &err) noexcept : std::logic_error(err){};
+};
+class eroare_dimensiuni : public eroare_generala{
+public:
+    explicit eroare_dimensiuni(const std::string &err) noexcept: eroare_generala(err){
+    }
+};
 
 class Lane
 {
@@ -277,12 +287,38 @@ private:
     int w,h;
     std::string player_name;
 public:
+    int citire_int(){
+        int a;
+        std::cin>>a;
+        return a;
+    }
+
     void start(){
-        std::cout<<"hello there, what is your name?";
+        std::cout<<"hello there, what is your name?\n";
         std::cin>>player_name;
         std::cout<<"ok, "<<player_name<<", you now have to pick the shape of your street\n";
-        std::cout<<"choose two numbers between 3 and 20 for your street's width and height";
-        std::cin>>w>>h;
+        std::cout<<"choose two numbers between 3 and 20 for your street's width and height\n";
+        bool ok;
+        do{
+            ok=0;
+            std::cout<<"width=";
+            w=citire_int();
+            std::cout<<"height=";
+            h=citire_int();
+            try{
+                if(!(w>=3 && w<=20) || !(h>=3 && h<=20))
+                {
+                    throw eroare_dimensiuni("Dimensiuni gresite!!");
+                }
+            }
+            catch (eroare_dimensiuni &e)
+            {
+                std::cout<<e.what()<<"\n";
+                ok=1; //se citeste din nou
+            }
+        }
+        while(ok);
+
         Game joc(w,h);
         std::cout<<"when you think you're ready, type start and enter";
         std::string aux;
