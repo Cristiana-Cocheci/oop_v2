@@ -81,6 +81,7 @@ public:
         }
 
     }
+    ~fastLane() override{}
 };
 
 class freeLane : public Lane
@@ -96,6 +97,7 @@ public:
         //nimic
         //sta pe loc
     }
+    ~freeLane() override{}
 };
 
 
@@ -110,6 +112,7 @@ public:
     virtual int use()=0;
     virtual std::string type()=0;
     virtual std::string getName()=0;
+    virtual ~Booster(){}
 };
 class Coin: public Booster
 {
@@ -142,6 +145,7 @@ public:
     std::string getName() override {return name;}
     int use() override{return value;}
     std::string type()override{return "coin";}
+    ~Coin() override{}
 };
 
 class JumpToken: public Booster
@@ -160,12 +164,12 @@ public:
         if(name=="long"){
             return noLanes;
         }
-        if(name=="back"){
+        else{//if(name=="back"){
             return -1;
         }
     }
     std::string getName() override {return name;}
-
+    ~JumpToken() override{}
 };
 
 class Player{
@@ -211,10 +215,11 @@ private:
     ///Coin special_coin= Coin("special", noLanes, mapWidth);
     std::vector <std::shared_ptr<Lane>> map;
     std::vector <std::shared_ptr<Booster>> boosters;
+    int no_boosters;
     std::vector <std::vector<bool>> b_activi;
 public:
     Game(int w=20, int h=10, const std::string& pn="unknown", int score_=0, int coins_=0)
-        :player_name(pn), score(score_), noLanes(h), mapWidth(w), quit(false), coins(coins_)
+        :quit(false), noLanes(h), mapWidth(w), score(score_), coins(coins_), player_name(pn)
     {
 
         b_activi.resize(noLanes, std::vector<bool>(mapWidth,false));
@@ -233,9 +238,8 @@ public:
             }
         }
         player= Player(mapWidth, noLanes);
-        int no_boosters= (int) 1.8*noLanes;
+        no_boosters= (int) 1.8*noLanes;
         rlutil::setColor(rlutil::BROWN);
-        std::cerr<<no_boosters;
         for(int i=0;i<no_boosters;i++){
             if(i%2==0){
                 std::string coin_type;
@@ -289,7 +293,7 @@ public:
                     rlutil::setColor(rlutil::BLUE);
                     std::cout << "P ";
                     rlutil::setColor(rlutil::LIGHTBLUE);
-                    for(int q=0;q<boosters.size();q++){
+                    for(int q=0;q<no_boosters;q++){
                         if(boosters[q]->getX()==j && boosters[q]->getY()==i && b_activi[boosters[q]->getY()][boosters[q]->getX()]==1){
                             b_activi[boosters[q]->getY()][boosters[q]->getX()]=false; //dezactivez booster;
                             if(boosters[q]->type()=="coin"){
@@ -308,7 +312,7 @@ public:
                     }
                 }
                 //afisare_booster
-                for(int q=0;q<boosters.size();q++){
+                for(int q=0;q<no_boosters;q++){
                     if(boosters[q]->getX()==j && boosters[q]->getY()==i && b_activi[boosters[q]->getY()][boosters[q]->getX()]==1){
                         if(boosters[q]->type()=="coin"){
                             if(boosters[q]->getName()=="gold"){ //gold coin
@@ -359,8 +363,8 @@ public:
         if(current=='q'){quit=true;}
     }
     bool collected_b(){
-        for(int i=0;i<b_activi.size();i++){
-            for(int j=0;j<b_activi[i].size();j++){
+        for(int i=0;i<noLanes;i++){
+            for(int j=0;j<mapWidth;j++){
                 if(b_activi[i][j]==true){
                     return false;
                 }
@@ -371,7 +375,7 @@ public:
     void logic(){
         for(int i=1;i<noLanes-1;i++)
         {
-            if(std::rand()%3==0) //sansele sa se miste lane ul
+            if(std::rand()%5==0) //sansele sa se miste lane ul
                 map[i]->move();
             if(map[i]->trackPosition(player.getX())==1 && player.getY()==i) {
                 quit = true;
@@ -413,7 +417,7 @@ public:
         std::cin>>a;
         return a;
     }
-    Meniu(){}
+    Meniu(int _w=10, int _h=10, const std::string pn="unknown"):w(_w),h(_h),player_name(pn){}
     void start(){
         rlutil::setColor(rlutil::LIGHTCYAN);
         std::cout<<"hello there, what is your name?\n";
@@ -423,7 +427,7 @@ public:
         std::cout<<"Your goal is to cross the road as many times as possible, while collecting boosters\nWhen you finished collecting boosters, you win!";
         std::cout<<"\nBe careful tho, when you get hit by a car it's Game Over for you. You only live once ;)\n\n";
         std::cout<<"ok, "<<player_name<<", you now have to pick the shape of your street\n";
-        std::cout<<"choose two numbers between 6 and 20 for your street's width and height\n";
+        std::cout<<"choose two numbers between 6 and 15 for your street's width and height\n";
         bool ok;
         do{
             ok=false;
@@ -432,7 +436,7 @@ public:
             std::cout<<"height=";
             h=citire_int();
             try{
-                if(!(w>=6 && w<=20) || !(h>=6 && h<=20))
+                if(!(w>=6 && w<=15) || !(h>=6 && h<=15))
                 {
                     throw eroare_dimensiuni("Dimensiuni gresite!!");
                 }
