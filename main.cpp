@@ -105,8 +105,9 @@ class Booster
 {
 protected:
     int x,y,noLanes, mapWidth;
+    std::string name;
 public:
-    Booster(int _x, int _y,int _noLanes, int _mapWidth): x(_x),y(_y), noLanes(_noLanes), mapWidth(_mapWidth){};
+    Booster(int _x, int _y,int _noLanes, int _mapWidth, std::string n): x(_x),y(_y), noLanes(_noLanes), mapWidth(_mapWidth), name(n){};
     virtual int getX() const{return x;}
     virtual int getY() const{return y;}
     virtual int use()=0;
@@ -114,13 +115,12 @@ public:
     virtual std::string getName()=0;
     virtual ~Booster(){}
 };
-class Coin: public Booster
+class Coin: virtual public Booster
 {
-private:
-    std::string name;
+protected:
     int value;
 public:
-    Coin(const std::string& _name, int _noLanes, int _mapWidth):Booster(rand()%(_mapWidth-1)+1,rand()%(_noLanes-1)+1,_noLanes,_mapWidth),name(_name){
+    Coin(const std::string& _name, int _noLanes, int _mapWidth):Booster(rand()%(_mapWidth-1)+1,rand()%(_noLanes-1)+1,_noLanes,_mapWidth,_name){
         if(_name=="special"){
             int chance=rand()%10;
             if(chance<5){value=2;} //50% sanse sa fie siver coin
@@ -148,13 +148,11 @@ public:
     ~Coin() override{}
 };
 
-class JumpToken: public Booster
+class JumpToken: virtual public Booster
 {
-private:
-    std::string name;
 public:
     JumpToken(const std::string& _name, int _noLanes, int _mapWidth)
-        : Booster(rand()%(_mapWidth-1)+1,rand()%(_noLanes-1)+1,_noLanes,_mapWidth),name(_name){}
+        : Booster(rand()%(_mapWidth-1)+1,rand()%(_noLanes-1)+1,_noLanes,_mapWidth, _name){}
 
     std::string type()override{return "JumpToken";}
     int use()override{
@@ -170,6 +168,19 @@ public:
     }
     std::string getName() override {return name;}
     ~JumpToken() override{}
+};
+
+class CoinJump: public Coin, public JumpToken{
+public:
+    CoinJump(const std::string& n, int h, int w)
+        :Booster(rand()%(w-1)+1,rand()%(h-1)+1,h,w, n),Coin(n,h,w), JumpToken(n,h,w){
+        value=10;
+    }
+    std::string type()override{return "CoinJump";}
+    std::string getName() override {return name;}
+    int use() override{
+        return value;
+    }
 };
 
 class Player{
@@ -241,18 +252,21 @@ public:
         no_boosters= (int) 1.8*noLanes;
         rlutil::setColor(rlutil::BROWN);
         for(int i=0;i<no_boosters;i++){
-            if(i%2==0){
+            if(i%3==0){
                 std::string coin_type;
                 if(i%3==0){coin_type="special";}
                 else {coin_type="gold";}
                 boosters.push_back(std::make_shared<Coin>(coin_type,noLanes,mapWidth));
             }
-            else{
+            else if(i%3==1){
                 std::string jump_type;
                 if(i%3==0){jump_type="short";}
                 else if(i%3==1){jump_type="long";}
                 else {jump_type="back";}
                 boosters.push_back(std::make_shared<JumpToken>(jump_type,noLanes,mapWidth));
+            }
+            else{
+                boosters.push_back(std::make_shared<CoinJump>("coinjump",noLanes,mapWidth));
             }
             b_activi[boosters[i]->getY()][boosters[i]->getX()]=true;
         }
@@ -308,6 +322,11 @@ public:
 
                                 }
                             }
+                            else if(boosters[q]->type()=="CoinJump"){
+                                coins+=boosters[q]->use();
+                                int distance=noLanes-j+1;
+                                for(int aux=0;aux<distance;aux++){player.MoveUp();}
+                            }
                         }
                     }
                 }
@@ -343,6 +362,11 @@ public:
                                 std::cout << "J ";
                                 rlutil::setColor(rlutil::LIGHTBLUE);
                             }
+                        }
+                        else if(boosters[q]->type()=="CoinJump"){
+                            rlutil::setColor(rlutil::LIGHTGREEN);
+                            std::cout << "$$";
+                            rlutil::setColor(rlutil::LIGHTBLUE);
                         }
 
                     }
