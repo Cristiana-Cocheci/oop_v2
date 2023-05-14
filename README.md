@@ -3,7 +3,15 @@
 ### Tema 0
 
 - [ ] Cross the road
-- [ ] Traverseaza strada fara sa te calce masinile.
+- [ ] Traverseaza strada fara sa te calce masinile (<>) pentru a iti creste scorul si a aduna monezi.
+- [ ] Cand ai colectat toti boosterii ai castigat.
+- [ ] Tipuri de boosteri:
+      - [ ] coins(*) golden (3pct) - galben
+      - [ ] coins(*) special (-1/3 pct) - alb
+      - [ ] jumper(J) short (1 lane) -rosu
+      - [ ] jumper(J) long (te duce pana la capat si inapoi la start) -roz
+      - [ ] jumper(J) back (-1 lane) -alb
+      
 
 ## Tema 2
 
