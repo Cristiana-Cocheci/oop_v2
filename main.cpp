@@ -107,8 +107,9 @@ public:
     Booster(int _x, int _y,int _noLanes, int _mapWidth): x(_x),y(_y), noLanes(_noLanes), mapWidth(_mapWidth){};
     virtual int getX() const{return x;}
     virtual int getY() const{return y;}
-    //virtual void use()=0;
-    //virtual std::string type()=0;
+    virtual int use()=0;
+    virtual std::string type()=0;
+    virtual std::string getName()=0;
 };
 class Coin: public Booster
 {
@@ -116,15 +117,14 @@ private:
     std::string name;
     int value;
 public:
-    Coin(const std::string _name, int _noLanes, int _mapWidth):Booster(rand()%(_mapWidth-1)+1,rand()%(_noLanes-1)+1,_noLanes,_mapWidth){
+    Coin(const std::string& _name, int _noLanes, int _mapWidth):Booster(rand()%(_mapWidth-1)+1,rand()%(_noLanes-1)+1,_noLanes,_mapWidth),name(_name){
         if(_name=="special"){
             int chance=rand()%10;
-            if(chance<5){name="silver";} //50% sanse sa fie siver coin
-            else if(chance<8){name="gold";} //30% sanse sa fie gold coin
-            else{name="rusty";}//20% sanse sa fie rusty coin
+            if(chance<5){value=2;} //50% sanse sa fie siver coin
+            else if(chance<8){value=3;} //30% sanse sa fie gold coin
+            else{value=-1;}//20% sanse sa fie rusty coin
         }
-        else{name=_name;}
-        if(name=="gold"){value=3;}
+        else if(name=="gold"){value=3;}
         else if(name=="silver"){value=2;}
         else if(name=="rusty"){value=-1;}
 
@@ -139,16 +139,34 @@ public:
         value=other.value;
         return *this;
     }
-    //void use() override{}
-    //int get_value(){return value;}
-    //std::string type()override{return "coin";}
+    std::string getName() override {return name;}
+    int use() override{return value;}
+    std::string type()override{return "coin";}
 };
-/*
-class Token: public Booster
-{
-public:
 
-};*/
+class JumpToken: public Booster
+{
+private:
+    std::string name;
+public:
+    JumpToken(const std::string& _name, int _noLanes, int _mapWidth)
+        : Booster(rand()%(_mapWidth-1)+1,rand()%(_noLanes-1)+1,_noLanes,_mapWidth),name(_name){}
+
+    std::string type()override{return "JumpToken";}
+    int use()override{
+        if(name=="short"){
+            return 1;
+        }
+        if(name=="long"){
+            return noLanes;
+        }
+        if(name=="back"){
+            return -1;
+        }
+    }
+    std::string getName() override {return name;}
+
+};
 
 class Player{
 private:
@@ -193,12 +211,13 @@ private:
     ///Coin special_coin= Coin("special", noLanes, mapWidth);
     std::vector <std::shared_ptr<Lane>> map;
     std::vector <std::shared_ptr<Booster>> boosters;
+    std::vector <std::vector<bool>> b_activi;
 public:
-    Game(int w=20, int h=10, const std::string pn="unknown", int score_=0, int coins_=0)
+    Game(int w=20, int h=10, const std::string& pn="unknown", int score_=0, int coins_=0)
         :player_name(pn), score(score_), noLanes(h), mapWidth(w), quit(false), coins(coins_)
     {
 
-
+        b_activi.resize(noLanes, std::vector<bool>(mapWidth,false));
         for(int i=0;i<noLanes;i++) {
 
             if(i%27==3 || i%27==17) { //
@@ -218,11 +237,20 @@ public:
         rlutil::setColor(rlutil::BROWN);
         std::cerr<<no_boosters;
         for(int i=0;i<no_boosters;i++){
-            std::string coin_type;
-            if(i%5==0){coin_type="special";}
-            else{coin_type="gold";}
-            boosters.push_back(std::make_shared<Coin>(coin_type,noLanes,mapWidth));
-            std::cerr<<boosters[i]->getY()<<" "<<boosters[i]->getX()<<" "<<"\n";
+            if(i%2==0){
+                std::string coin_type;
+                if(i%3==0){coin_type="special";}
+                else {coin_type="gold";}
+                boosters.push_back(std::make_shared<Coin>(coin_type,noLanes,mapWidth));
+            }
+            else{
+                std::string jump_type;
+                if(i%3==0){jump_type="short";}
+                else if(i%3==1){jump_type="long";}
+                else {jump_type="back";}
+                boosters.push_back(std::make_shared<JumpToken>(jump_type,noLanes,mapWidth));
+            }
+            b_activi[boosters[i]->getY()][boosters[i]->getX()]=true;
         }
     }
     //operator <<
@@ -262,23 +290,64 @@ public:
                     std::cout << "P ";
                     rlutil::setColor(rlutil::LIGHTBLUE);
                     for(int q=0;q<boosters.size();q++){
-                        if(boosters[q]->getX()==j && boosters[q]->getY()==i){
+                        if(boosters[q]->getX()==j && boosters[q]->getY()==i && b_activi[boosters[q]->getY()][boosters[q]->getX()]==1){
+                            b_activi[boosters[q]->getY()][boosters[q]->getX()]=false; //dezactivez booster;
+                            if(boosters[q]->type()=="coin"){
+                                coins+=boosters[q]->use();
+                            }
+                            else if(boosters[q]->type()=="JumpToken"){
+                                int distance=boosters[q]->use();
+                                if(distance==-1){player.MoveDown();}
+                                else{
+                                    if(distance==noLanes){distance=noLanes-j+1;}
+                                    for(int aux=0;aux<distance;aux++){player.MoveUp();}
 
+                                }
+                            }
                         }
                     }
                 }
                 //afisare_booster
                 for(int q=0;q<boosters.size();q++){
-                    if(boosters[q]->getX()==j && boosters[q]->getY()==i){
-                        rlutil::setColor(rlutil::WHITE);
-                        std::cout << "* ";
-                        rlutil::setColor(rlutil::LIGHTBLUE);
+                    if(boosters[q]->getX()==j && boosters[q]->getY()==i && b_activi[boosters[q]->getY()][boosters[q]->getX()]==1){
+                        if(boosters[q]->type()=="coin"){
+                            if(boosters[q]->getName()=="gold"){ //gold coin
+                                rlutil::setColor(rlutil::YELLOW);
+                                std::cout << "* ";
+                                rlutil::setColor(rlutil::LIGHTBLUE);
+                            }
+                            else if(boosters[q]->getName()=="special"){ //special coin
+                                rlutil::setColor(rlutil::WHITE);
+                                std::cout << "* ";
+                                rlutil::setColor(rlutil::LIGHTBLUE);
+                            }
+
+                        }
+                        else if(boosters[q]->type()=="JumpToken"){
+                            if(boosters[q]->getName()=="short"){
+                                rlutil::setColor(rlutil::LIGHTRED);
+                                std::cout << "J ";
+                                rlutil::setColor(rlutil::LIGHTBLUE);
+                            }
+                            else if(boosters[q]->getName()=="long"){
+                                rlutil::setColor(rlutil::LIGHTMAGENTA);
+                                std::cout << "J ";
+                                rlutil::setColor(rlutil::LIGHTBLUE);
+                            }
+                            else if(boosters[q]->getName()=="back"){
+                                rlutil::setColor(rlutil::WHITE);
+                                std::cout << "J ";
+                                rlutil::setColor(rlutil::LIGHTBLUE);
+                            }
+                        }
+
                     }
                 }
             }
             std::cout<<"\n";
         }
-        std::cout <<"Score "<<score<<"\n";
+        std::cout <<"Score : "<<score<<"\n";
+        std::cout <<"Coins : " <<coins<<"\n";
     }
     void input()
     {
@@ -289,6 +358,16 @@ public:
         if(current=='d'){player.MoveRight();}
         if(current=='q'){quit=true;}
     }
+    bool collected_b(){
+        for(int i=0;i<b_activi.size();i++){
+            for(int j=0;j<b_activi[i].size();j++){
+                if(b_activi[i][j]==true){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
     void logic(){
         for(int i=1;i<noLanes-1;i++)
         {
@@ -298,6 +377,12 @@ public:
                 quit = true;
                 rlutil::setColor(rlutil::LIGHTCYAN);
                 std::cout << "Sorry "<<player_name<<", but you lost ;-(\n";
+            }
+            ///daca s-au colectat toate boosterele
+            if(collected_b()==1){
+                quit=true;
+                rlutil::setColor(rlutil::LIGHTCYAN);
+                std::cout << "Wow "<<player_name<<", you WON :D\n";
             }
         }
         if(player.getY()==noLanes-1)
@@ -323,7 +408,7 @@ private:
     int w,h;
     std::string player_name;
 public:
-    int citire_int(){
+    static int citire_int(){
         int a;
         std::cin>>a;
         return a;
@@ -335,11 +420,13 @@ public:
         rlutil::setColor(rlutil::WHITE);
         std::cin>>player_name;
         rlutil::setColor(rlutil::LIGHTCYAN);
+        std::cout<<"Your goal is to cross the road as many times as possible, while collecting boosters\nWhen you finished collecting boosters, you win!";
+        std::cout<<"\nBe careful tho, when you get hit by a car it's Game Over for you. You only live once ;)\n\n";
         std::cout<<"ok, "<<player_name<<", you now have to pick the shape of your street\n";
         std::cout<<"choose two numbers between 6 and 20 for your street's width and height\n";
         bool ok;
         do{
-            ok=0;
+            ok=false;
             std::cout<<"width=";
             w=citire_int();
             std::cout<<"height=";
@@ -353,7 +440,7 @@ public:
             catch (eroare_dimensiuni &e)
             {
                 std::cout<<e.what()<<"\n";
-                ok=1; //se citeste din nou
+                ok=true; //se citeste din nou
             }
         }
         while(ok);
@@ -361,7 +448,7 @@ public:
         Game joc(w,h,player_name);
         std::cout<<"when you think you're ready, type \"start\" and press enter.\n";
         do{
-            ok=0;
+            ok=false;
             std::string aux;
             rlutil::setColor(rlutil::WHITE);
             std::cin>> aux;
@@ -373,7 +460,7 @@ public:
             }
             catch(nu_incepem &err){
                 std::cout<<err.what()<<"\n";
-                ok=1;
+                ok=true;
             }
 
 

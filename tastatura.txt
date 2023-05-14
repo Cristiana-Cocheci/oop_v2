@@ -1,3 +1,6 @@
-q
+Name
+10
+10
+start
 q
 
