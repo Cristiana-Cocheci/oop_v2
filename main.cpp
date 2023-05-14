@@ -417,7 +417,7 @@ public:
         std::cin>>a;
         return a;
     }
-    Meniu(int _w=10, int _h=10, const std::string pn="unknown"):w(_w),h(_h),player_name(pn){}
+    Meniu(int _w=10, int _h=10, const std::string& pn="unknown"):w(_w),h(_h),player_name(pn){}
     void start(){
         rlutil::setColor(rlutil::LIGHTCYAN);
         std::cout<<"hello there, what is your name?\n";
