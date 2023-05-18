@@ -11,6 +11,7 @@
       - [ ] jumper(J) short (1 lane) -rosu
       - [ ] jumper(J) long (te duce pana la capat si inapoi la start) -roz
       - [ ] jumper(J) back (-1 lane) -alb
+      - [ ] coinjumper ($$) (10pct +te duce pana la capat si inapoi la start) 
       
 
 ## Tema 2
