@@ -18,15 +18,33 @@ class nu_incepem :public eroare_generala{
 public:
     explicit nu_incepem(const std::string &err) noexcept: eroare_generala(err){}
 };
+class eroare_lane: public eroare_generala{
+public:
+    explicit eroare_lane(const std::string &err) noexcept: eroare_generala(err){}
+};
+class eroare_lane1: public eroare_lane{
+public:
+    explicit eroare_lane1(const std::string &err) noexcept: eroare_lane(err){}
+};
+class eroare_lane2: public eroare_lane{
+public:
+    explicit eroare_lane2(const std::string &err) noexcept: eroare_lane(err){}
+};
 
 class Lane
 {
 protected:
     std::deque<int> cars; // 0=gol, 1=masina, 3=feelane -nu
-    int direction=rand()%2;
+    const int direction=rand()%2;
 public:
-    Lane(int width=20)
+    Lane(int width=10)
     {
+        if(width>15){
+            throw eroare_lane1("Esti prea ambitios, latime mai mica!");
+        }
+        if(width<5){
+            throw eroare_lane2("Fii mai ambitios! Latime mai mare!");
+        }
         for(int i=0; i<width;i++)
         {
             cars.push_front(0);
@@ -60,7 +78,6 @@ class fastLane : public Lane
 {
 public:
     using Lane::Lane;
-    //fastLane(int _width):Lane(_width){};
     void move() override{
         int c; //masina
         if(rand()%10==0) //10% sanse sa intre o masina de dimensiune 3 pe drum, practic se misca mai repede lane-ul
@@ -87,7 +104,13 @@ public:
 class freeLane : public Lane
 {
 public:
-    freeLane(int width=20){
+    freeLane(int width=10){
+        if(width>15){
+            throw eroare_lane1("Esti prea ambitios, latime mai mica!");
+        }
+        if(width<5){
+            throw eroare_lane2("Fii mai ambitios! Latime mai mare!");
+        }
         for(int i=0; i<width;i++)
         {
             cars.push_front(3);
@@ -107,7 +130,8 @@ protected:
     int x,y,noLanes, mapWidth;
     std::string name;
 public:
-    Booster(int _x, int _y,int _noLanes, int _mapWidth, std::string n): x(_x),y(_y), noLanes(_noLanes), mapWidth(_mapWidth), name(n){};
+    Booster(int _x, int _y,int _noLanes, int _mapWidth, const std::string& n): x(_x),y(_y), noLanes(_noLanes), mapWidth(_mapWidth), name(n){};
+    //virtual Booster* clone() const=0;
     virtual int getX() const{return x;}
     virtual int getY() const{return y;}
     virtual int use()=0;
@@ -120,6 +144,7 @@ class Coin: virtual public Booster
 protected:
     int value;
 public:
+    //virtual Booster* clone() const override{return new Coin(*this);;}
     Coin(const std::string& _name, int _noLanes, int _mapWidth):Booster(rand()%(_mapWidth-1)+1,rand()%(_noLanes-1)+1,_noLanes,_mapWidth,_name){
         if(_name=="special"){
             int chance=rand()%10;
@@ -151,6 +176,7 @@ public:
 class JumpToken: virtual public Booster
 {
 public:
+    //virtual Booster* clone() const override { return new JumpToken(*this);}
     JumpToken(const std::string& _name, int _noLanes, int _mapWidth)
         : Booster(rand()%(_mapWidth-1)+1,rand()%(_noLanes-1)+1,_noLanes,_mapWidth, _name){}
 
@@ -229,23 +255,32 @@ private:
     int no_boosters;
     std::vector <std::vector<bool>> b_activi;
 public:
-    Game(int w=20, int h=10, const std::string& pn="unknown", int score_=0, int coins_=0)
-        :quit(false), noLanes(h), mapWidth(w), score(score_), coins(coins_), player_name(pn)
+    Game(int w=20, int h=10, const std::string& pn="unknown")
+        :quit(false), noLanes(h), mapWidth(w), player_name(pn)
     {
-
+        score=coins=0;
         b_activi.resize(noLanes, std::vector<bool>(mapWidth,false));
         for(int i=0;i<noLanes;i++) {
 
             if(i%27==3 || i%27==17) { //
                 //fastLane *fl= new fastLane(mapWidth);
-                map.push_back(std::make_shared<fastLane>(mapWidth));
+                try{
+                    map.push_back(std::make_shared<fastLane>(mapWidth));
+                }
+                catch(eroare_lane1 &err){std::cout<< err.what()<< "\n";}
+                catch(eroare_lane2 &err){std::cout<< err.what()<< "\n";}
+
             }
             if(i%27==1 || i%27==14){
                 //freeLane *free= new freeLane(mapWidth);
                 map.push_back(std::make_shared<freeLane>(mapWidth));
             }
             else {
-                map.push_back(std::make_shared<Lane>(mapWidth));
+                try{
+                    map.push_back(std::make_shared<Lane>(mapWidth));
+                }
+                catch(eroare_lane &err){std::cout<< err.what()<< "\n";}
+
             }
         }
         player= Player(mapWidth, noLanes);
@@ -254,14 +289,16 @@ public:
         for(int i=0;i<no_boosters;i++){
             if(i%3==0){
                 std::string coin_type;
-                if(i%3==0){coin_type="special";}
+                int aux=std::rand();
+                if(aux%3==0){coin_type="special";}
                 else {coin_type="gold";}
                 boosters.push_back(std::make_shared<Coin>(coin_type,noLanes,mapWidth));
             }
             else if(i%3==1){
                 std::string jump_type;
-                if(i%3==0){jump_type="short";}
-                else if(i%3==1){jump_type="long";}
+                int aux=std::rand();
+                if(aux%3==0){jump_type="short";}
+                else if(aux%3==1){jump_type="long";}
                 else {jump_type="back";}
                 boosters.push_back(std::make_shared<JumpToken>(jump_type,noLanes,mapWidth));
             }
@@ -324,8 +361,8 @@ public:
                             }
                             else if(boosters[q]->type()=="CoinJump"){
                                 coins+=boosters[q]->use();
-                                int distance=noLanes-j+1;
-                                for(int aux=0;aux<distance;aux++){player.MoveUp();}
+                                player.reset();
+                                score++;
                             }
                         }
                     }
