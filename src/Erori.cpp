@@ -3,7 +3,7 @@
 //
 
 
-#include "../headers/erori.h"
+#include "../headers/Erori.h"
 
 eroare_generala::eroare_generala(const std::string &err) noexcept: std::logic_error(err){};
 

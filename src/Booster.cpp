@@ -54,9 +54,6 @@ void Coin::afisare(){
         rlutil::setColor(rlutil::LIGHTBLUE);
     }
 }
-std::string Coin::getName() {
-    return name;
-}
 
 int Coin::use() {
     return value;
@@ -107,9 +104,6 @@ int JumpToken::use() {
     }
 }
 
-std::string JumpToken::getName()  {
-    return name;
-}
 
 CoinJump::CoinJump(const std::string &n, int h, int w)
         :Booster(rand()%(w-1)+1,rand()%(h-1)+1,h,w, n),Coin(n,h,w), JumpToken(n,h,w){
@@ -119,9 +113,7 @@ CoinJump::CoinJump(const std::string &n, int h, int w)
 std::string CoinJump::type() {
     return "CoinJump";
 }
-std::string CoinJump::getName() {
-    return name;
-}
+
 /*
 void CoinJump::apply(Game &game, Player &player){
     game.increase_coins(value);

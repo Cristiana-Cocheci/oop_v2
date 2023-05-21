@@ -23,7 +23,6 @@ public:
     virtual int getY() const;
     virtual int use()=0;
     virtual std::string type()=0;
-    virtual std::string getName()=0;
     //virtual void apply(Game &game, Player &player)=0;
     virtual void afisare()=0;
     virtual ~Booster() = default;
@@ -36,7 +35,6 @@ public:
     //virtual Booster* clone() const override{return new Coin(*this);;}
     Coin(const std::string& _name, int _noLanes, int _mapWidth);
     Coin& operator=(const Coin& other);
-    std::string getName() override;
     int use() override;
     std::string type()override;
     //void apply (Game &game, Player &player) override;
@@ -52,7 +50,6 @@ public:
 
     std::string type()override;
     int use()override;
-    std::string getName() override;
     //void apply (Game &game, Player &player) override;
     void afisare() override;
     ~JumpToken() override = default;
@@ -62,7 +59,6 @@ class CoinJump: public Coin, public JumpToken{
 public:
     CoinJump(const std::string& n, int h, int w);
     std::string type()override;
-    std::string getName() override;
     //void apply (Game &game, Player &player) override;
     void afisare() override;
     int use() override;
