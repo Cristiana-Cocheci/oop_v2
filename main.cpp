@@ -6,6 +6,10 @@ int main() {
 
     srand(time(nullptr));
     Meniu m;
-    m.start();
+    try{
+        m.start();
+    }
+    catch(nu_incepem &err){std::cout<< err.what()<< "\n";}
+
     return 0;
 }

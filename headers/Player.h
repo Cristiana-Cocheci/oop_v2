@@ -6,6 +6,7 @@
 #define OOP_PLAYER_H
 
 #include <iostream>
+#include "Erori.h"
 
 class Player{
 private:

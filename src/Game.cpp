@@ -11,6 +11,9 @@ std::shared_ptr<Game> Game::clone(){
 Game::Game(int w, int h, const std::string& pn)
         :quit(false), noLanes(h), mapWidth(w), player_name(pn)
 {
+    if(w<0 || h<0){
+        throw nu_incepem("Jocul nu poate incepe");
+    }
     score=coins=0;
     b_activi.resize(noLanes, std::vector<bool>(mapWidth,false));
     for(int i=0;i<noLanes;i++) {
@@ -20,8 +23,7 @@ Game::Game(int w, int h, const std::string& pn)
             try{
                 map.push_back(std::make_shared<fastLane>(mapWidth));
             }
-            catch(eroare_lane1 &err){std::cout<< err.what()<< "\n";}
-            catch(eroare_lane2 &err){std::cout<< err.what()<< "\n";}
+            catch(eroare_lane &err){std::cout<< err.what()<< "\n";}
 
         }
         if(i%27==1 || i%27==14){

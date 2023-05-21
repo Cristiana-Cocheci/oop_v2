@@ -5,7 +5,13 @@
 
 #include "../headers/Player.h"
 
-Player::Player(int width, int height) {x=width/2;y=0, noLanes=height, mapWidth=width;}
+
+Player::Player(int width, int height) {
+    if(width==3*height){
+        throw nu_incepem("prea lat");
+    }
+    x=width/2;y=0, noLanes=height, mapWidth=width;
+}
 
 Player::Player(const Player &other) : x(other.x),y(other.y), noLanes(other.noLanes), mapWidth(other.mapWidth){ std::cout<<"cc\n";};
 
@@ -21,9 +27,15 @@ Player& Player::operator=(const Player &other) {
 Player::~Player() {std::cout<<"destr\n";}
 
 int Player::getX() const {
+    if(x<0){
+        throw nu_incepem("unde esti");
+    }
     return x;
 }
 int Player::getY() const {
+    if(y<0){
+        throw nu_incepem("unde esti");
+    }
     return  y;
 }
 
