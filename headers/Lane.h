@@ -9,6 +9,7 @@
 #include <deque>
 #include <cstdlib>
 #include <iostream>
+#include <memory>
 
 class Lane
 {
@@ -16,6 +17,7 @@ protected:
     std::deque<int> cars; // 0=gol, 1=masina, 3=feelane -nu
     const int direction=rand()%2;
 public:
+    virtual std::shared_ptr<Lane> clone();
     Lane(int width=10);
     virtual void move();
     int trackPosition(int pos);
@@ -25,6 +27,7 @@ public:
 class fastLane : public Lane
 {
 public:
+    std::shared_ptr<Lane> clone() override;
     using Lane::Lane;
     void move() override;
     ~fastLane() override = default;
@@ -33,6 +36,7 @@ public:
 class freeLane : public Lane
 {
 public:
+    std::shared_ptr<Lane> clone() override;
     freeLane(int width=10);
     void move() override;
     ~freeLane() override = default;

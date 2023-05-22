@@ -6,6 +6,16 @@
 #include "../headers/Booster.h"
 #include "../headers/Game.h"
 
+std::shared_ptr<Booster> Coin::clone(){
+    return std::make_shared<Coin>(*this);
+}
+std::shared_ptr<Booster> CoinJump::clone(){
+    return std::make_shared<CoinJump>(*this);
+}
+std::shared_ptr<Booster> JumpToken::clone(){
+    return std::make_shared<JumpToken>(*this);
+}
+
 Booster::Booster(int _x, int _y, int _noLanes, int _mapWidth, const std::string &n) : x(_x),y(_y), noLanes(_noLanes), mapWidth(_mapWidth), name(n){};
 
 int Booster::getX() const {
@@ -41,6 +51,8 @@ Coin& Coin::operator=(const Coin &other) {
 
 void Coin::apply(Game &game, Player &player){
     game.increase_coins(value);
+    player.MoveUp();
+    player.MoveDown();
 }
 
 void Coin::afisare(){
@@ -55,11 +67,11 @@ void Coin::afisare(){
         rlutil::setColor(rlutil::LIGHTBLUE);
     }
 }
-
+/*
 int Coin::use() {
     return value;
 }
-/*
+
 std::string Coin::type() {
     return "coin";
 }
@@ -94,6 +106,7 @@ void JumpToken::afisare(){
         rlutil::setColor(rlutil::LIGHTBLUE);
     }
 }
+/*
 int JumpToken::use() {
     if(name=="short"){
         return 1;
@@ -106,7 +119,7 @@ int JumpToken::use() {
     }
 }
 
-
+*/
 CoinJump::CoinJump(const std::string &n, int h, int w)
         :Booster(rand()%(w-1)+1,rand()%(h-1)+1,h,w, n),Coin(n,h,w), JumpToken(n,h,w){
     value=10;
@@ -128,6 +141,7 @@ void CoinJump::afisare(){
     std::cout << "$$";
     rlutil::setColor(rlutil::LIGHTBLUE);
 }
+/*
 int CoinJump::use() {
     return value;
-}
+}*/

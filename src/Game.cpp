@@ -4,8 +4,27 @@
 
 #include "../headers/Game.h"
 
-std::shared_ptr<Game> Game::clone(){
-    return std::make_shared<Game>(*this);
+
+Game& Game::operator=(const Game &other) {
+    std::cout << "op=\n";
+    quit=other.quit;
+    noLanes= other.noLanes;
+    mapWidth= other.mapWidth;
+    score=other.score;
+    coins=other.coins;
+    player_name=other.player_name;
+    player=other.player;
+    no_boosters=other.no_boosters;
+    b_activi=other.b_activi;
+
+    for(int i=0; i<map.size(); i++){
+        map.push_back( other.map[i]->clone());
+    }
+    for(int i=0; i<boosters.size();i++){
+        boosters.push_back(other.boosters[i]->clone());
+    }
+
+    return *this;
 }
 
 Game::Game(int w, int h, const std::string& pn)
@@ -18,8 +37,7 @@ Game::Game(int w, int h, const std::string& pn)
     b_activi.resize(noLanes, std::vector<bool>(mapWidth,false));
     for(int i=0;i<noLanes;i++) {
 
-        if(i%27==3 || i%27==17) { //
-            //fastLane *fl= new fastLane(mapWidth);
+        if(i%27==3 || i%27==17) {
             try{
                 map.push_back(std::make_shared<fastLane>(mapWidth));
             }
@@ -27,7 +45,6 @@ Game::Game(int w, int h, const std::string& pn)
 
         }
         if(i%27==1 || i%27==14){
-            //freeLane *free= new freeLane(mapWidth);
             map.push_back(std::make_shared<freeLane>(mapWidth));
         }
         else {
@@ -110,24 +127,7 @@ void Game::draw()
                     if(boosters[q]->getX()==j && boosters[q]->getY()==i && b_activi[boosters[q]->getY()][boosters[q]->getX()]==1){
                         b_activi[boosters[q]->getY()][boosters[q]->getX()]=false; //dezactivez booster;
                         boosters[q]->apply(*this, player);
-                        /*
-                        if(boosters[q]->type()=="coin"){
-                            coins+=boosters[q]->use();
-                        }
-                        else if(boosters[q]->type()=="JumpToken"){
-                            int distance=boosters[q]->use();
-                            if(distance==-1){player.MoveDown();}
-                            else{
-                                if(distance==noLanes){distance=noLanes-j+1;}
-                                for(int aux=0;aux<distance;aux++){player.MoveUp();}
 
-                            }
-                        }
-                        else if(boosters[q]->type()=="CoinJump"){
-                            coins+=boosters[q]->use();
-                            player.reset();
-                            score++;
-                        }*/
                     }
                 }
             }
@@ -135,42 +135,7 @@ void Game::draw()
             for(int q=0;q<no_boosters;q++){
                 if(boosters[q]->getX()==j && boosters[q]->getY()==i && b_activi[boosters[q]->getY()][boosters[q]->getX()]==1){
                     boosters[q]->afisare();
-                    /*if(boosters[q]->type()=="coin"){
-                        if(boosters[q]->getName()=="gold"){ //gold coin
-                            rlutil::setColor(rlutil::YELLOW);
-                            std::cout << "* ";
-                            rlutil::setColor(rlutil::LIGHTBLUE);
-                        }
-                        else if(boosters[q]->getName()=="special"){ //special coin
-                            rlutil::setColor(rlutil::WHITE);
-                            std::cout << "* ";
-                            rlutil::setColor(rlutil::LIGHTBLUE);
-                        }
 
-                    }
-                    else if(boosters[q]->type()=="JumpToken"){
-                        if(boosters[q]->getName()=="short"){
-                            rlutil::setColor(rlutil::LIGHTRED);
-                            std::cout << "J ";
-                            rlutil::setColor(rlutil::LIGHTBLUE);
-                        }
-                        else if(boosters[q]->getName()=="long"){
-                            rlutil::setColor(rlutil::LIGHTMAGENTA);
-                            std::cout << "J ";
-                            rlutil::setColor(rlutil::LIGHTBLUE);
-                        }
-                        else if(boosters[q]->getName()=="back"){
-                            rlutil::setColor(rlutil::WHITE);
-                            std::cout << "J ";
-                            rlutil::setColor(rlutil::LIGHTBLUE);
-                        }
-                    }
-                    else if(boosters[q]->type()=="CoinJump"){
-                        rlutil::setColor(rlutil::LIGHTGREEN);
-                        std::cout << "$$";
-                        rlutil::setColor(rlutil::LIGHTBLUE);
-                    }
-                    */
                 }
             }
         }

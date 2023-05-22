@@ -29,7 +29,7 @@ private:
     int no_boosters;
     std::vector <std::vector<bool>> b_activi;
 public:
-    std::shared_ptr<Game> clone();
+    Game& operator=(const Game& other);
     void increase_coins(int x);
     void increase_score(int x);
     Game(int w=20, int h=10, const std::string& pn="unknown");

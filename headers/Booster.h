@@ -9,6 +9,7 @@
 #include <string>
 #include <iostream>
 #include <rlutil.h>
+#include <memory>
 class Game;
 class Player;
 
@@ -18,11 +19,10 @@ protected:
     int x,y,noLanes, mapWidth;
     std::string name;
 public:
+    virtual std::shared_ptr<Booster> clone()=0;
     Booster(int _x, int _y,int _noLanes, int _mapWidth, const std::string& n);
     virtual int getX() const;
     virtual int getY() const;
-    virtual int use()=0;
-    //virtual std::string type()=0;
     virtual void apply(Game &game, Player &player)=0;
     virtual void afisare()=0;
     virtual ~Booster() = default;
@@ -32,10 +32,10 @@ class Coin: virtual public Booster
 protected:
     int value;
 public:
-    //virtual Booster* clone() const override{return new Coin(*this);;}
+    std::shared_ptr<Booster> clone() override;
     Coin(const std::string& _name, int _noLanes, int _mapWidth);
     Coin& operator=(const Coin& other);
-    int use() override;
+    //int use() override;
     //std::string type()override;
     void apply (Game &game, Player &player) override;
     void afisare() override;
@@ -45,11 +45,11 @@ public:
 class JumpToken: virtual public Booster
 {
 public:
-    //virtual Booster* clone() const override { return new JumpToken(*this);}
+    std::shared_ptr<Booster> clone() override;
     JumpToken(const std::string& _name, int _noLanes, int _mapWidth);
 
     //std::string type()override;
-    int use()override;
+    //int use()override;
     void apply (Game &game, Player &player) override;
     void afisare() override;
     ~JumpToken() override = default;
@@ -57,11 +57,12 @@ public:
 
 class CoinJump: public Coin, public JumpToken{
 public:
+    std::shared_ptr<Booster> clone() override;
     CoinJump(const std::string& n, int h, int w);
     //std::string type()override;
     void apply (Game &game, Player &player) override;
     void afisare() override;
-    int use() override;
+    //int use() override;
 };
 
 

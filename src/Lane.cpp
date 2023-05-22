@@ -4,6 +4,16 @@
 
 #include "../headers/Lane.h"
 
+std::shared_ptr<Lane> Lane::clone(){
+    return std::make_shared<Lane>(*this);
+}
+std::shared_ptr<Lane> fastLane::clone(){
+    return std::make_shared<fastLane>(*this);
+}
+std::shared_ptr<Lane> freeLane::clone(){
+    return std::make_shared<freeLane>(*this);
+}
+
 Lane::Lane(int width) {
     if(width>15){
         throw eroare_lane1("Esti prea ambitios, latime mai mica!");
