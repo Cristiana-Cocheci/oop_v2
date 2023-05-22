@@ -37,17 +37,7 @@ Coin::Coin(const std::string &_name, int _noLanes, int _mapWidth) :Booster(rand(
     else if(name=="silver"){value=2;}
     else if(name=="rusty"){value=-1;}
 }
-/*
-Coin& Coin::operator=(const Coin &other) {
-    std::cout << "op=coin\n";
-    x = other.x;
-    y = other.y;
-    noLanes = other.noLanes;
-    mapWidth = other.mapWidth;
-    name=other.name;
-    value=other.value;
-    return *this;
-}*/
+
 
 void Coin::apply(Game &game, Player &player){
     game.increase_coins(value);

@@ -34,7 +34,6 @@ protected:
 public:
     std::shared_ptr<Booster> clone() override;
     Coin(const std::string& _name, int _noLanes, int _mapWidth);
-    //Coin& operator=(const Coin& other);
     void apply (Game &game, Player &player) override;
     void afisare() override;
     ~Coin() override = default;

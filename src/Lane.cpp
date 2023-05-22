@@ -13,6 +13,9 @@ std::shared_ptr<Lane> fastLane::clone(){
 std::shared_ptr<Lane> freeLane::clone(){
     return std::make_shared<freeLane>(*this);
 }
+std::shared_ptr<Lane> waterLane::clone(){
+    return std::make_shared<waterLane>(*this);
+}
 
 Lane::Lane(int width) {
     if(width>15){
@@ -85,4 +88,16 @@ freeLane::freeLane(int width) {
 void freeLane::move() {
     //nimic
     //sta pe loc
+}
+waterLane::waterLane(int width) {
+    for(int i=0; i<width;i++)
+    {
+        if(i%2==1){
+            cars.push_front(5);
+        }
+        else{
+            cars.push_front(4);
+        }
+
+    }
 }

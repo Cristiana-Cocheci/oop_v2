@@ -47,6 +47,9 @@ Game::Game(int w, int h, const std::string& pn)
         if(i%27==1 || i%27==14){
             map.push_back(std::make_shared<freeLane>(mapWidth));
         }
+        else if(i%27==7){
+            map.push_back(std::make_shared<waterLane>(mapWidth));
+        }
         else {
             try{
                 map.push_back(std::make_shared<Lane>(mapWidth));
@@ -116,6 +119,18 @@ void Game::draw()
                 std::cout << "__";
                 rlutil::setColor(rlutil::LIGHTBLUE);
             }
+            else if(map[i]->trackPosition(j)==4 && i>0 && i<noLanes-1)//waterlane -- water
+            {
+                rlutil::setColor(rlutil:: BLUE);
+                std::cout << "~~";
+                rlutil::setColor(rlutil::LIGHTBLUE);
+            }
+            else if(map[i]->trackPosition(j)==5 && i>0 && i<noLanes-1)//waterlane -- lilypad
+            {
+                rlutil::setColor(rlutil:: GREEN);
+                std::cout << "/\\";
+                rlutil::setColor(rlutil::LIGHTBLUE);
+            }
             else
             { std::cout<<"  "; }
             if(player.getX()==j && player.getY()==i)
@@ -164,7 +179,12 @@ void Game::logic(){
         if(map[i]->trackPosition(player.getX())==1 && player.getY()==i) {
             quit = true;
             rlutil::setColor(rlutil::LIGHTCYAN);
-            std::cout << "Sorry "<<player_name<<", but you lost ;-(\n";
+            std::cout << "Sorry "<<player_name<<", but you lost, you were hit by a car ;-(\n";
+        }
+        else if(map[i]->trackPosition(player.getX())==4 && player.getY()==i) {
+            quit = true;
+            rlutil::setColor(rlutil::LIGHTCYAN);
+            std::cout << "Sorry "<<player_name<<", but you lost, you fell into water ;-(\n";
         }
         ///daca s-au colectat toate boosterele
         if(collected_b()==1){

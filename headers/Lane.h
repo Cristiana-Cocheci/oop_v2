@@ -41,5 +41,11 @@ public:
     void move() override;
     ~freeLane() override = default;
 };
+class waterLane : public freeLane{
+public:
+    std::shared_ptr<Lane> clone() override;
+    waterLane(int width=10);
+    ~waterLane() override = default;
+};
 
 #endif //OOP_LANE_H
