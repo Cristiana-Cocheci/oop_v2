@@ -17,10 +17,10 @@ Game& Game::operator=(const Game &other) {
     no_boosters=other.no_boosters;
     b_activi=other.b_activi;
 
-    for(int i=0; i<map.size(); i++){
+    for(auto i=0; i<map.size(); i++){
         map.push_back( other.map[i]->clone());
     }
-    for(int i=0; i<boosters.size();i++){
+    for(auto i=0; i<boosters.size();i++){
         boosters.push_back(other.boosters[i]->clone());
     }
 

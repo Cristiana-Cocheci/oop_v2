@@ -67,22 +67,11 @@ void Coin::afisare(){
         rlutil::setColor(rlutil::LIGHTBLUE);
     }
 }
-/*
-int Coin::use() {
-    return value;
-}
 
-std::string Coin::type() {
-    return "coin";
-}
-*/
 JumpToken::JumpToken(const std::string &_name, int _noLanes, int _mapWidth)
         : Booster(rand()%(_mapWidth-1)+1,rand()%(_noLanes-1)+1,_noLanes,_mapWidth, _name){}
 
-        /*
-std::string JumpToken::type() {
-    return "JumpToken";
-}*/
+
 
 void JumpToken::apply(Game &game, Player &player){
     player.reset();
@@ -106,28 +95,12 @@ void JumpToken::afisare(){
         rlutil::setColor(rlutil::LIGHTBLUE);
     }
 }
-/*
-int JumpToken::use() {
-    if(name=="short"){
-        return 1;
-    }
-    if(name=="long"){
-        return noLanes;
-    }
-    else{//if(name=="back"){
-        return -1;
-    }
-}
 
-*/
 CoinJump::CoinJump(const std::string &n, int h, int w)
         :Booster(rand()%(w-1)+1,rand()%(h-1)+1,h,w, n),Coin(n,h,w), JumpToken(n,h,w){
     value=10;
 }
-/*
-std::string CoinJump::type() {
-    return "CoinJump";
-}*/
+
 
 
 void CoinJump::apply(Game &game, Player &player){
@@ -141,7 +114,3 @@ void CoinJump::afisare(){
     std::cout << "$$";
     rlutil::setColor(rlutil::LIGHTBLUE);
 }
-/*
-int CoinJump::use() {
-    return value;
-}*/

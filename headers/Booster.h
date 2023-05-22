@@ -35,8 +35,6 @@ public:
     std::shared_ptr<Booster> clone() override;
     Coin(const std::string& _name, int _noLanes, int _mapWidth);
     Coin& operator=(const Coin& other);
-    //int use() override;
-    //std::string type()override;
     void apply (Game &game, Player &player) override;
     void afisare() override;
     ~Coin() override = default;
@@ -47,9 +45,6 @@ class JumpToken: virtual public Booster
 public:
     std::shared_ptr<Booster> clone() override;
     JumpToken(const std::string& _name, int _noLanes, int _mapWidth);
-
-    //std::string type()override;
-    //int use()override;
     void apply (Game &game, Player &player) override;
     void afisare() override;
     ~JumpToken() override = default;
@@ -59,10 +54,8 @@ class CoinJump: public Coin, public JumpToken{
 public:
     std::shared_ptr<Booster> clone() override;
     CoinJump(const std::string& n, int h, int w);
-    //std::string type()override;
     void apply (Game &game, Player &player) override;
     void afisare() override;
-    //int use() override;
 };
 
 
