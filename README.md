@@ -4,6 +4,8 @@
 
 - [ ] Cross the road
 - [ ] Traverseaza strada fara sa te calce masinile (<>) pentru a iti creste scorul si a aduna monezi.
+- [ ] Pe langa lane-urile cu masini, exista Lane-uri libere, marcate cu verde deschis, dar si Lane-uri cu apa, in care poti sa pici si sa mori.Ca sa nu te inneci, traverseaza apa pe frunzele de nufar!
+
 - [ ] Cand ai colectat toti boosterii ai castigat.
 - [ ] Tipuri de boosteri:
       - [ ] coins(*) golden (3pct) - galben
