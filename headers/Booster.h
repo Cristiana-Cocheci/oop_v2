@@ -9,7 +9,8 @@
 #include <string>
 #include <iostream>
 #include <rlutil.h>
-//#include "Game.h"
+class Game;
+class Player;
 
 class Booster
 {
@@ -18,12 +19,11 @@ protected:
     std::string name;
 public:
     Booster(int _x, int _y,int _noLanes, int _mapWidth, const std::string& n);
-    //virtual Booster* clone() const=0;
     virtual int getX() const;
     virtual int getY() const;
     virtual int use()=0;
-    virtual std::string type()=0;
-    //virtual void apply(Game &game, Player &player)=0;
+    //virtual std::string type()=0;
+    virtual void apply(Game &game, Player &player)=0;
     virtual void afisare()=0;
     virtual ~Booster() = default;
 };
@@ -36,8 +36,8 @@ public:
     Coin(const std::string& _name, int _noLanes, int _mapWidth);
     Coin& operator=(const Coin& other);
     int use() override;
-    std::string type()override;
-    //void apply (Game &game, Player &player) override;
+    //std::string type()override;
+    void apply (Game &game, Player &player) override;
     void afisare() override;
     ~Coin() override = default;
 };
@@ -48,9 +48,9 @@ public:
     //virtual Booster* clone() const override { return new JumpToken(*this);}
     JumpToken(const std::string& _name, int _noLanes, int _mapWidth);
 
-    std::string type()override;
+    //std::string type()override;
     int use()override;
-    //void apply (Game &game, Player &player) override;
+    void apply (Game &game, Player &player) override;
     void afisare() override;
     ~JumpToken() override = default;
 };
@@ -58,8 +58,8 @@ public:
 class CoinJump: public Coin, public JumpToken{
 public:
     CoinJump(const std::string& n, int h, int w);
-    std::string type()override;
-    //void apply (Game &game, Player &player) override;
+    //std::string type()override;
+    void apply (Game &game, Player &player) override;
     void afisare() override;
     int use() override;
 };

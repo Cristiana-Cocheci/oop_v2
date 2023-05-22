@@ -4,6 +4,7 @@
 //
 
 #include "../headers/Booster.h"
+#include "../headers/Game.h"
 
 Booster::Booster(int _x, int _y, int _noLanes, int _mapWidth, const std::string &n) : x(_x),y(_y), noLanes(_noLanes), mapWidth(_mapWidth), name(n){};
 
@@ -37,11 +38,11 @@ Coin& Coin::operator=(const Coin &other) {
     value=other.value;
     return *this;
 }
-/*
+
 void Coin::apply(Game &game, Player &player){
     game.increase_coins(value);
 }
-*/
+
 void Coin::afisare(){
     if(name=="gold"){ //gold coin
         rlutil::setColor(rlutil::YELLOW);
@@ -58,23 +59,24 @@ void Coin::afisare(){
 int Coin::use() {
     return value;
 }
-
+/*
 std::string Coin::type() {
     return "coin";
 }
-
+*/
 JumpToken::JumpToken(const std::string &_name, int _noLanes, int _mapWidth)
         : Booster(rand()%(_mapWidth-1)+1,rand()%(_noLanes-1)+1,_noLanes,_mapWidth, _name){}
 
+        /*
 std::string JumpToken::type() {
     return "JumpToken";
-}
-/*
+}*/
+
 void JumpToken::apply(Game &game, Player &player){
     player.reset();
     game.increase_score(1);
 }
-*/
+
 void JumpToken::afisare(){
     if(name=="short"){
         rlutil::setColor(rlutil::LIGHTRED);
@@ -109,18 +111,18 @@ CoinJump::CoinJump(const std::string &n, int h, int w)
         :Booster(rand()%(w-1)+1,rand()%(h-1)+1,h,w, n),Coin(n,h,w), JumpToken(n,h,w){
     value=10;
 }
-
+/*
 std::string CoinJump::type() {
     return "CoinJump";
-}
+}*/
 
-/*
+
 void CoinJump::apply(Game &game, Player &player){
     game.increase_coins(value);
     game.increase_score(1);
     player.reset();
 }
-*/
+
 void CoinJump::afisare(){
     rlutil::setColor(rlutil::LIGHTGREEN);
     std::cout << "$$";

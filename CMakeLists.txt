@@ -80,7 +80,7 @@ endfunction()
 ###############################################################################
 
 # NOTE: update executable name in .github/workflows/cmake.yml:25 when changing name here
-add_executable(${PROJECT_NAME} main.cpp AJUTOR/rlutil.h src/Lane.cpp headers/Lane.h src/Booster.cpp headers/Booster.h src/Player.cpp headers/Player.h src/Game.cpp headers/Game.h src/Meniu.cpp headers/Meniu.h src/Erori.cpp headers/Erori.h)
+add_executable(${PROJECT_NAME} main.cpp AJUTOR/rlutil.h src/Lane.cpp headers/Lane.h src/Player.cpp headers/Player.h src/Game.cpp headers/Game.h src/Booster.cpp headers/Booster.h src/Meniu.cpp headers/Meniu.h src/Erori.cpp headers/Erori.h)
 
 ###############################################################################
 

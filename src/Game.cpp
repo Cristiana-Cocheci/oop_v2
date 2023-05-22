@@ -109,7 +109,8 @@ void Game::draw()
                 for(int q=0;q<no_boosters;q++){
                     if(boosters[q]->getX()==j && boosters[q]->getY()==i && b_activi[boosters[q]->getY()][boosters[q]->getX()]==1){
                         b_activi[boosters[q]->getY()][boosters[q]->getX()]=false; //dezactivez booster;
-                        //boosters[q]->apply(*this, player);
+                        boosters[q]->apply(*this, player);
+                        /*
                         if(boosters[q]->type()=="coin"){
                             coins+=boosters[q]->use();
                         }
@@ -126,7 +127,7 @@ void Game::draw()
                             coins+=boosters[q]->use();
                             player.reset();
                             score++;
-                        }
+                        }*/
                     }
                 }
             }

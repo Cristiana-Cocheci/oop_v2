@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include "Erori.h"
+#include "Booster.h"
 
 class Player{
 private:
