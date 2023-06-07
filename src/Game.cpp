@@ -35,29 +35,35 @@ Game::Game(int w, int h, const std::string& pn)
     }
     score=coins=0;
     b_activi.resize(noLanes, std::vector<bool>(mapWidth,false));
-    for(int i=0;i<noLanes;i++) {
+    try {
+        for (int i = 0; i < noLanes; i++) {
 
-        if(i%27==3 || i%27==17) {
-            try{
-                map.push_back(std::make_shared<fastLane>(mapWidth));
+            if (i % 27 == 3) {
+                try {
+                    map.push_back(LaneFactory::RightFastLane());
+                }
+                catch (eroare_lane &err) { std::cout << err.what() << "\n"; }
+
             }
-            catch(eroare_lane &err){std::cout<< err.what()<< "\n";}
+            if (i % 27 == 9) {
+                map.push_back(LaneFactory::LeftFastLane());
 
-        }
-        if(i%27==1 || i%27==14){
-            map.push_back(std::make_shared<freeLane>(mapWidth));
-        }
-        else if(i%27==7){
-            map.push_back(std::make_shared<waterLane>(mapWidth));
-        }
-        else {
-            try{
-                map.push_back(std::make_shared<Lane>(mapWidth));
             }
-            catch(eroare_lane &err){std::cout<< err.what()<< "\n";}
+            if (i % 27 == 1 || i % 27 == 14) {
+                map.push_back(LaneFactory::ffreeLane());
+            } else if (i % 27 == 7) {
+                map.push_back(LaneFactory::wwaterLane());
+            } else {
+                if (i % 2 == 0) {
+                    map.push_back(LaneFactory::RightNormalLane());
+                } else {
+                    map.push_back(LaneFactory::LeftNormalLane());
+                }
 
+            }
         }
     }
+    catch(eroare_lane & err){ std::cout << err.what() << "\n"; }
     player= Player(mapWidth, noLanes);
     no_boosters= (int) 1.8*noLanes;
     rlutil::setColor(rlutil::BROWN);
@@ -188,9 +194,10 @@ void Game::logic(){
         }
         ///daca s-au colectat toate boosterele
         if(collected_b()==1){
-            quit=true;
             rlutil::setColor(rlutil::LIGHTCYAN);
             std::cout << "Wow "<<player_name<<", you WON :D\n";
+            quit=true;
+            return;
         }
     }
     if(player.getY()==noLanes-1)

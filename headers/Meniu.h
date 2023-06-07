@@ -14,15 +14,18 @@
 #include "Game.h"
 
 
+
 class Meniu{
 private:
-    int w,h;
+    int h;
     std::string player_name;
 public:
-    static int citire_int();
-    Meniu(int _w=10, int _h=10, const std::string& pn="unknown");
-    void start();
+    Meniu(int _h=10, const std::string& pn="unknown");
+    void open();
+    void run();
+    friend class Meniu_builder;
 };
+
 
 
 #endif //OOP_MENIU_H

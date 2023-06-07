@@ -17,12 +17,9 @@ std::shared_ptr<Lane> waterLane::clone(){
     return std::make_shared<waterLane>(*this);
 }
 
-Lane::Lane(int width) {
-    if(width>15){
-        throw eroare_lane1("Esti prea ambitios, latime mai mica!");
-    }
-    if(width<5){
-        throw eroare_lane2("Fii mai ambitios! Latime mai mare!");
+Lane::Lane(int width, int dir, int rate): direction(dir), SpawnRate(rate) {
+    if(width!=10 || dir!=0 && dir!=1 || rate<0 && rate>100){
+        throw eroare_lane("Latime gresita?");
     }
     for(int i=0; i<width;i++)
     {
@@ -32,7 +29,7 @@ Lane::Lane(int width) {
 
 void Lane::move() {
     int c; //masina ==1
-    if(rand()%10==1) //10% sanse sa intre o masina pe drum
+    if(rand()%100<SpawnRate) //sanse sa intre o masina pe drum
         c=1;
     else
         c=0;
@@ -77,7 +74,7 @@ void fastLane::move()  {
 
 }
 
-freeLane::freeLane(int width) {
+freeLane::freeLane(int width){
 
     for(int i=0; i<width;i++)
     {

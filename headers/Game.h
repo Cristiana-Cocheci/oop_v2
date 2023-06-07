@@ -11,7 +11,7 @@
 #include <ctime>
 #include <memory>
 #include "Player.h"
-#include "Lane.h"
+#include "LaneFactory.h"
 
 
 class Game{
@@ -32,7 +32,7 @@ public:
     Game& operator=(const Game& other);
     void increase_coins(int x);
     void increase_score(int x);
-    Game(int w=20, int h=10, const std::string& pn="unknown");
+    Game(int w=10, int h=10, const std::string& pn="unknown");
 
     //operator <<
     friend std::ostream& operator<<(std::ostream& out, const Game& g){

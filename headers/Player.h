@@ -13,7 +13,7 @@ class Player{
 private:
     int x,y, noLanes, mapWidth;
 public:
-    Player(int width=20, int height=10);
+    Player(int width=10, int height=10);
     Player(const Player& other);
     Player& operator=(const Player& other);
     ~Player();

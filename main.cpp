@@ -1,13 +1,13 @@
 #include <ctime>
 
-#include "headers/Meniu.h"
+#include "headers/Meniu_builder.h"
 
 int main() {
 
     srand(time(nullptr));
-    Meniu m;
+    Meniu_builder mb;
     try{
-        m.start();
+        mb.open().run();
     }
     catch(nu_incepem &err){std::cout<< err.what()<< "\n";}
 

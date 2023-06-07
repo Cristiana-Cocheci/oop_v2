@@ -11,14 +11,16 @@
 #include <iostream>
 #include <memory>
 
+
 class Lane
 {
 protected:
     std::deque<int> cars; // 0=gol, 1=masina, 3=feelane -nu
-    const int direction=rand()%2;
+    int direction;
+    int SpawnRate;
 public:
     virtual std::shared_ptr<Lane> clone();
-    Lane(int width=10);
+    Lane(int width=10, int dir=0, int rate=10);
     virtual void move();
     int trackPosition(int pos);
     friend std::ostream& operator<<(std::ostream& out, const Lane& l);
@@ -47,5 +49,7 @@ public:
     waterLane(int width=10);
     ~waterLane() override = default;
 };
+
+
 
 #endif //OOP_LANE_H
