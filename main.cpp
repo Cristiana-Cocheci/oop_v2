@@ -8,6 +8,7 @@ int main() {
     Meniu_builder mb;
     try{
         mb.open().run();
+
     }
     catch(nu_incepem &err){std::cout<< err.what()<< "\n";}
 
