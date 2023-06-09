@@ -18,7 +18,7 @@ std::shared_ptr<Lane> waterLane::clone(){
 }
 
 Lane::Lane(int width, int dir, int rate): direction(dir), SpawnRate(rate) {
-    if(width!=10 || dir!=0 && dir!=1 || rate<0 && rate>100){
+    if(width!=10 || dir!=0 && dir!=1 || (rate<0 || rate>100)){
         throw eroare_lane("Latime gresita?");
     }
     for(int i=0; i<width;i++)
