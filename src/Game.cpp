@@ -28,7 +28,7 @@ Game& Game::operator=(const Game &other) {
 }
 
 Game::Game(int w, int h, const std::string& pn)
-        :quit(false), noLanes(h), mapWidth(w), player_name(pn)
+        :quit(false), mapWidth(w), noLanes(h), player_name(pn)
 {
     if(w<0 || h<0){
         throw nu_incepem("Jocul nu poate incepe");
