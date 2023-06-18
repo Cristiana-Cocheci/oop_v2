@@ -45,11 +45,11 @@ Game::Game(int w, int h, const std::string& pn)
                 catch (eroare_lane &err) { std::cout << err.what() << "\n"; }
 
             }
-            if (i % 27 == 9) {
+            else if (i % 27 == 9) {
                 map.push_back(LaneFactory::LeftFastLane());
 
             }
-            if (i % 27 == 1 || i % 27 == 14) {
+            else if (i % 27 == 1 || i % 27 == 14) {
                 map.push_back(LaneFactory::ffreeLane());
             } else if (i % 27 == 7) {
                 map.push_back(LaneFactory::wwaterLane());
