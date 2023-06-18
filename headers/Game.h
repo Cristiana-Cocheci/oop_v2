@@ -29,7 +29,7 @@ private:
     std::vector <std::vector<bool>> b_activi;
     Game(int w=10, int h=10, const std::string& pn="unknown");
 public:
-    Game& operator=(const Game&)=delete;
+    Game& operator=(const Game& other);
     void increase_coins(int x);
     void increase_score(int x);
 
