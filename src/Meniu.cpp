@@ -33,7 +33,7 @@ void Meniu::open() {
     } while (ok);
 }
 void Meniu::run(){
-    Game joc(12,h,player_name);
+    auto& joc=Game::get_game(12,h,player_name);
     std::cout<<"when you think you're ready, type \"start\" and press enter.\n";
     bool ok;
     do{

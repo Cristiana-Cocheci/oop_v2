@@ -23,16 +23,15 @@ private:
     int coins;
     std::string player_name;
     Player player;
-    ///Coin special_coin= Coin("special", noLanes, mapWidth);
     std::vector <std::shared_ptr<Lane>> map;
     std::vector <std::shared_ptr<Booster>> boosters;
     int no_boosters;
     std::vector <std::vector<bool>> b_activi;
+    Game(int w=10, int h=10, const std::string& pn="unknown");
 public:
-    Game& operator=(const Game& other);
+    Game& operator=(const Game&)=delete;
     void increase_coins(int x);
     void increase_score(int x);
-    Game(int w=10, int h=10, const std::string& pn="unknown");
 
     //operator <<
     friend std::ostream& operator<<(std::ostream& out, const Game& g){
@@ -45,6 +44,7 @@ public:
     void logic();
     void run();
 
+    static Game& get_game(int w,int h,std::string pn);
 };
 
 

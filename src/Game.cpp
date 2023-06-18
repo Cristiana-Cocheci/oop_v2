@@ -4,7 +4,7 @@
 
 #include "../headers/Game.h"
 
-
+/*
 Game& Game::operator=(const Game &other) {
     std::cout << "op=\n";
     quit=other.quit;
@@ -25,7 +25,7 @@ Game& Game::operator=(const Game &other) {
     }
 
     return *this;
-}
+}*/
 
 Game::Game(int w, int h, const std::string& pn)
         :quit(false), noLanes(h), mapWidth(w), player_name(pn)
@@ -220,4 +220,9 @@ void Game::run()
     logic();
     rlutil::msleep(100);
     }
+}
+
+Game &Game::get_game(int w, int h, std::string pn) {
+    static Game g(w,h,pn);
+    return g;
 }
