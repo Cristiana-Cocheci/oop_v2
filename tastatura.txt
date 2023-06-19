@@ -1,6 +1,9 @@
 Name
 10
-10
+3
+cactus
+love
+magic
 start
 q
 
