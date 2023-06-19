@@ -23,7 +23,7 @@ template <typename T> class Prizes{
     std::vector<T> prizes;
     int size;
 public:
-    Prizes(const std::vector<T> arr, int l):prizes(arr), size(l){}
+    Prizes(const std::vector<T> &arr, int l):prizes(arr), size(l){}
 };
 
 
