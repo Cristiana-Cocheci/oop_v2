@@ -1,6 +1,7 @@
 Name
 10
 3
+object
 cactus
 love
 magic
