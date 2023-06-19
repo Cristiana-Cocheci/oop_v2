@@ -4,7 +4,6 @@
 
 #include "../headers/Game.h"
 
-
 Game& Game::operator=(const Game &other) {
     std::cout << "op=\n";
     quit=other.quit;

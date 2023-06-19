@@ -27,17 +27,18 @@ private:
     std::vector <std::shared_ptr<Booster>> boosters;
     int no_boosters;
     std::vector <std::vector<bool>> b_activi;
+
     Game(int w=10, int h=10, const std::string& pn="unknown");
 public:
     Game& operator=(const Game& other);
     void increase_coins(int x);
     void increase_score(int x);
-
     //operator <<
     friend std::ostream& operator<<(std::ostream& out, const Game& g){
         out<<"Date de baza joc: numar benzi-"<<g.noLanes<<", latimea drumului-"<<g.mapWidth<<", scorul-"<<g.score<<"\n";
         return out;
     }
+
     void draw();
     void input();
     bool collected_b();

@@ -12,7 +12,7 @@
 #define OOP_MENIU_H
 
 #include "Game.h"
-
+#include "Prizes.h"
 
 
 class Meniu{
@@ -23,9 +23,9 @@ public:
     Meniu(int _h=10, const std::string& pn="unknown");
     void open();
     void run();
+
     friend class Meniu_builder;
 };
-
 
 
 #endif //OOP_MENIU_H
