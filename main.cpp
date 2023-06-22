@@ -7,7 +7,7 @@ int main() {
     srand(time(nullptr));
     Meniu_builder mb;
     try{
-        mb.open().run();
+        mb.open().run().premiere();
 
     }
     catch(nu_incepem &err){std::cout<< err.what()<< "\n";}

@@ -14,3 +14,7 @@ Meniu_builder &Meniu_builder::run() {
     return *this;
 }
 
+Meniu_builder &Meniu_builder::premiere(){
+    M.premiere();
+    return *this;
+}

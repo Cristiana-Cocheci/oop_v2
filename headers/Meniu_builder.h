@@ -12,6 +12,7 @@ private:
 public:
     Meniu_builder& open();
     Meniu_builder& run();
+    Meniu_builder& premiere();
 };
 
 #endif //OOP_MENIU_BUILDER_H

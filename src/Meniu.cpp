@@ -63,7 +63,7 @@ void Meniu::run(){
                         std::cin >> x;
                         p.push_back(x);
                     }
-                    Prizes<float> sume(p, l);
+                    Prizes<float> sume(p);
                 } else {
                     std::vector<std::string> p;
                     for (int i = 0; i < l; i++) {
@@ -71,13 +71,14 @@ void Meniu::run(){
                         std::cin >> x;
                         p.push_back(x);
                     }
-                    Prizes<std::string> sume(p, l);
+                    Prizes<std::string> sume(p);
+                    std::cout<<sume.getsize()<<"\n";
                 }
-
         }
     }
     while(ok);
-    std::cout<<"when you think you're ready, type \"start\" and press enter.\n";
+
+    std::cout<<"\nwhen you think you're ready, type \"start\" and press enter.\n";
     do{
         ok=false;
         std::string aux;
@@ -91,5 +92,23 @@ void Meniu::run(){
         }
     }
     while(ok);
+
     joc.run();
+}
+
+void Meniu::premiere() {
+
+    Prizes<float> p;
+    Prizes<std::string> w;
+    std::cout<<"AFISARE PREMII: [ ";
+    if(p.getsize()>0) {
+        for (auto e: p.get_p()) {
+            std::cout << e << " ";
+        }
+    }else{
+        for(auto e: w.get_p()){
+            std::cout<<e<<" ";
+        }
+    }
+    std::cout<<"]\n";
 }

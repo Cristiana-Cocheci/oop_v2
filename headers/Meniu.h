@@ -23,6 +23,7 @@ public:
     Meniu(int _h=10, const std::string& pn="unknown");
     void open();
     void run();
+    void premiere();
 
     friend class Meniu_builder;
 };
