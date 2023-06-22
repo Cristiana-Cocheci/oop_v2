@@ -19,6 +19,7 @@ class Meniu{
 private:
     int h;
     std::string player_name;
+    bool won,opened,ran;
 public:
     Meniu(int _h=10, const std::string& pn="unknown");
     void open();

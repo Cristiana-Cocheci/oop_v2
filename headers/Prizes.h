@@ -12,12 +12,23 @@ template <typename T> class Prizes{
     static std::vector<T> prizes;
     std::vector<T> aux;
     static bool ok;
+    const std::string consolare = "\n(\\_/)\n"
+                        "( -,-)\n"
+                        "(\")_(\")\n";
 public:
     Prizes(){}
     explicit Prizes(const std::vector<T> &arr);
     static std::vector<T> get_p();
     int getsize();
-
+    friend std::ostream& operator<<(std::ostream& o,const Prizes<T> &obj){
+        o<<obj.consolare;
+        return o;
+    }
+    void winner(int h){
+        if(h<10){ // "dificultate mai scazuta", unul din premii va fi scos
+            prizes.pop_back();
+        }
+    }
 };
 
 template<typename T>

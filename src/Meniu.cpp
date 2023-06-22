@@ -8,9 +8,11 @@
 
 
 
-Meniu::Meniu(int _h, const std::string& pn):h(_h),player_name(pn){}
+Meniu::Meniu(int _h, const std::string& pn):h(_h),player_name(pn),won(false), opened(false), ran(false){}
 
 void Meniu::open() {
+    won=false;
+    opened=true;
     rlutil::setColor(rlutil::LIGHTCYAN);
     std::cout << "hello there, what is your name?\n";
     rlutil::setColor(rlutil::WHITE);
@@ -32,13 +34,9 @@ void Meniu::open() {
         }
 
     } while (ok);
-}
-void Meniu::run(){
-    auto& joc=Game::get_game(10,h,player_name);
     std::cout<<"\nYou know what's the fun part?\nYou get to choose your own prizes!\n";
     std::cout<<"Today I am Santa Claus, write me a list of up to 10 items of whatever you like!\n Could be a lucky number, an extravagant prime, a cat, a dog, a sum of money\n";
-    std::cout<<"If you don't choose 10 items, I'm gonna send you surprises!\nType the numer of prizes, the type of prize (\"number\" or \"object\") and then your prizes below. All the prizes have to be the same type";
-    bool ok;
+    std::cout<<"Type the numer of prizes, the type of prize (\"number\" or \"object\") and then your prizes below. All the prizes have to be the same type";
     do{
         ok=false;
         int l;
@@ -56,28 +54,35 @@ void Meniu::run(){
                 std::cout << "wrong type, read instructions again\n";
                 std::cin>>type;
             }
-                if (type == "number") {
-                    std::vector<float> p;
-                    for (int i = 0; i < l; i++) {
-                        float x;
-                        std::cin >> x;
-                        p.push_back(x);
-                    }
-                    Prizes<float> sume(p);
-                } else {
-                    std::vector<std::string> p;
-                    for (int i = 0; i < l; i++) {
-                        std::string x;
-                        std::cin >> x;
-                        p.push_back(x);
-                    }
-                    Prizes<std::string> sume(p);
-                    std::cout<<sume.getsize()<<"\n";
+            if (type == "number") {
+                std::vector<float> p;
+                for (int i = 0; i < l; i++) {
+                    float x;
+                    std::cin >> x;
+                    p.push_back(x);
                 }
+                Prizes<float> sume(p);
+            } else {
+                std::vector<std::string> p;
+                for (int i = 0; i < l; i++) {
+                    std::string x;
+                    std::cin >> x;
+                    p.push_back(x);
+                }
+                Prizes<std::string> sume(p);
+                std::cout<<sume.getsize()<<"\n";
+            }
         }
     }
     while(ok);
-
+}
+void Meniu::run(){
+    if(opened==false){
+        throw nu_incepem("Nu am citit inca datele!! Jocul nu poate incepe...\n");
+    }
+    ran=true;
+    auto& joc=Game::get_game(10,h,player_name);
+    bool ok;
     std::cout<<"\nwhen you think you're ready, type \"start\" and press enter.\n";
     do{
         ok=false;
@@ -93,14 +98,16 @@ void Meniu::run(){
     }
     while(ok);
 
-    joc.run();
+    won=joc.run();
 }
 
 void Meniu::premiere() {
-
+    if(opened==false){
+        throw nu_incepem("Nu am citit inca datele!! Nu putem afisa premiile...\n");
+    }
     Prizes<float> p;
     Prizes<std::string> w;
-    std::cout<<"AFISARE PREMII: [ ";
+    std::cout<<"AFISARE PREMII SELECTATE: [ ";
     if(p.getsize()>0) {
         for (auto e: p.get_p()) {
             std::cout << e << " ";
@@ -111,4 +118,15 @@ void Meniu::premiere() {
         }
     }
     std::cout<<"]\n";
+    if(won==true){
+        if(p.getsize()>0) {
+            p.winner(h);
+        }else{
+            w.winner(h);
+        }
+    }
+    else if(ran==true){
+        std::cout<<"Din pacate nu poti sa primesti premiile alese, dar iti voi da un premiu de consolare!";
+        std::cout<<w;
+    }
 }

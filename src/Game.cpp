@@ -27,7 +27,7 @@ Game& Game::operator=(const Game &other) {
 }
 */
 Game::Game(int w, int h, const std::string& pn)
-        :quit(false), noLanes(h), mapWidth(w), player_name(pn)
+        :win(false),quit(false), noLanes(h), mapWidth(w), player_name(pn)
 {
     if(w<0 || h<0){
         throw nu_incepem("Jocul nu poate incepe");
@@ -198,6 +198,8 @@ void Game::logic(){
         if(collected_b()==1){
             rlutil::setColor(rlutil::LIGHTCYAN);
             std::cout << "Wow "<<player_name<<", you WON :D\n";
+            win=true;
+            std::cout<<win;
             quit=true;
             return;
         }
@@ -213,8 +215,9 @@ void Game::increase_score(int x) {
     score+=x;
 }
 
-void Game::run()
+bool Game::run()
 {
+    bool win=0;
     while(!quit)
     {
     input();
@@ -222,6 +225,7 @@ void Game::run()
     logic();
     rlutil::msleep(100);
     }
+    return win;
 }
 
 Game &Game::get_game(int w, int h, std::string pn) {

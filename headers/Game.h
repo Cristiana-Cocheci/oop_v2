@@ -16,6 +16,7 @@
 
 class Game{
 private:
+    bool win;
     bool quit;
     int noLanes;
     int mapWidth;
@@ -44,7 +45,7 @@ public:
     void input();
     bool collected_b();
     void logic();
-    void run();
+    bool run();
 
     static Game& get_game(int w,int h,std::string pn);
 };
