@@ -682,12 +682,13 @@ namespace rlutil {
         // https://stackoverflow.com/a/55860234
 	struct timespec ts;
 	ts.tv_sec = ms / 1000000000ul;               // whole seconds
-	ts.tv_nsec = (ms % 1000000000ul) * 1000000;  // remainder, in nanoseconds	nanosleep(&ts, NULL);
+	ts.tv_nsec = (ms % 1000000000ul) * 1000000;  // remainder, in nanoseconds
+    nanosleep(&ts, NULL);
 
 	// usleep gives warnings in C code; seems to be deprecated/legacy
 	// usleep argument must be under 1 000 000
-	// if (ms > 1000) sleep(ms/1000000);
-	// usleep((ms % 1000000) * 1000);
+	//if (ms > 1000) sleep(ms/1000000);
+	//usleep((ms % 1000000) * 1000);
 #endif
     }
 
