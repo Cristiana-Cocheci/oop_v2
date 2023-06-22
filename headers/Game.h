@@ -30,7 +30,8 @@ private:
 
     Game(int w=10, int h=10, const std::string& pn="unknown");
 public:
-    Game& operator=(const Game& other);
+    Game(const Game&)=delete;
+    Game& operator=(const Game&)=delete;
     void increase_coins(int x);
     void increase_score(int x);
     //operator <<

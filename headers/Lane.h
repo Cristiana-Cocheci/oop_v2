@@ -19,7 +19,7 @@ protected:
     int direction;
     int SpawnRate;
 public:
-    virtual std::shared_ptr<Lane> clone();
+    //virtual std::shared_ptr<Lane> clone();
     Lane(int width=10, int dir=0, int rate=10);
     virtual void move();
     int trackPosition(int pos);
@@ -29,7 +29,7 @@ public:
 class fastLane : public Lane
 {
 public:
-    std::shared_ptr<Lane> clone() override;
+    //std::shared_ptr<Lane> clone() override;
     using Lane::Lane;
     void move() override;
     ~fastLane() override = default;
@@ -38,14 +38,14 @@ public:
 class freeLane : public Lane
 {
 public:
-    std::shared_ptr<Lane> clone() override;
+    //std::shared_ptr<Lane> clone() override;
     freeLane(int width=10);
     void move() override;
     ~freeLane() override = default;
 };
 class waterLane : public freeLane{
 public:
-    std::shared_ptr<Lane> clone() override;
+    //std::shared_ptr<Lane> clone() override;
     waterLane(int width=10);
     ~waterLane() override = default;
 };
