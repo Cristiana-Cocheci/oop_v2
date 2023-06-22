@@ -19,7 +19,7 @@ protected:
     int x,y,noLanes, mapWidth;
     std::string name;
 public:
-    virtual std::shared_ptr<Booster> clone()=0;
+    //virtual std::shared_ptr<Booster> clone()=0;
     Booster(int _x, int _y,int _noLanes, int _mapWidth, const std::string& n);
     virtual int getX() const;
     virtual int getY() const;
@@ -32,7 +32,7 @@ class Coin: virtual public Booster
 protected:
     int value;
 public:
-    std::shared_ptr<Booster> clone() override;
+    //std::shared_ptr<Booster> clone() override;
     Coin(const std::string& _name, int _noLanes, int _mapWidth);
     void apply (Game &game, Player &player) override;
     void afisare() override;
@@ -42,7 +42,7 @@ public:
 class JumpToken: virtual public Booster
 {
 public:
-    std::shared_ptr<Booster> clone() override;
+    //std::shared_ptr<Booster> clone() override;
     JumpToken(const std::string& _name, int _noLanes, int _mapWidth);
     void apply (Game &game, Player &player) override;
     void afisare() override;
@@ -51,7 +51,7 @@ public:
 
 class CoinJump: public Coin, public JumpToken{
 public:
-    std::shared_ptr<Booster> clone() override;
+    //std::shared_ptr<Booster> clone() override;
     CoinJump(const std::string& n, int h, int w);
     void apply (Game &game, Player &player) override;
     void afisare() override;

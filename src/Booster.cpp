@@ -5,7 +5,7 @@
 
 #include "../headers/Booster.h"
 #include "../headers/Game.h"
-
+/*
 std::shared_ptr<Booster> Coin::clone(){
     return std::make_shared<Coin>(*this);
 }
@@ -15,7 +15,7 @@ std::shared_ptr<Booster> CoinJump::clone(){
 std::shared_ptr<Booster> JumpToken::clone(){
     return std::make_shared<JumpToken>(*this);
 }
-
+*/
 Booster::Booster(int _x, int _y, int _noLanes, int _mapWidth, const std::string &n) : x(_x),y(_y), noLanes(_noLanes), mapWidth(_mapWidth), name(n){};
 
 int Booster::getX() const {
