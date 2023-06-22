@@ -1,7 +1,5 @@
 # Cross The Road
 
-### Tema 0
-
 - [ ] Cross the road
 - [ ] Traverseaza strada fara sa te calce masinile (<>) pentru a iti creste scorul si a aduna monezi.
 - [ ] Pe langa lane-urile cu masini, exista Lane-uri libere, marcate cu verde deschis, dar si Lane-uri cu apa, in care poti sa pici si sa mori.Ca sa nu te ineci, traverseaza apa pe frunzele de nufar!
@@ -16,16 +14,3 @@
       - [ ] coinjumper ($$) (10pct +te duce pana la capat si inapoi la start) 
       
 -[ ] La inceput iti alegi premiile pe care vrei sa le primesti daca vei castiga. Daca pierzi, vei primi totusi un premiu de consolare!
-
-## Tema 3
-
-#### Cerințe
-- [ ] 2 șabloane de proiectare (design patterns)
-- [ ] o funcție șablon (template) cu sens; minim 2 instanțieri
-- [ ] o clasă șablon cu sens; minim 2 instanțieri
-<!-- - [ ] o specializare pe funcție/clasă șablon -->
-- [ ] tag de `git`: de exemplu `v0.3` sau `v1.0`
-
-## Resurse
-
-- adăugați trimiteri către resursele externe care v-au ajutat sau pe care le-ați folosit
