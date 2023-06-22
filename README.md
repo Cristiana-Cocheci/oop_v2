@@ -1,4 +1,4 @@
-# OOP Template
+# Cross The Road
 
 ### Tema 0
 
@@ -15,27 +15,7 @@
       - [ ] jumper(J) back (-1 lane) -alb
       - [ ] coinjumper ($$) (10pct +te duce pana la capat si inapoi la start) 
       
-
-## Tema 2
-
-#### Cerințe
-- [ ] separarea codului din clase în `.h` (sau `.hpp`) și `.cpp`
-- [ ] moșteniri
-  - [ ] clasă cu atribut de tip pointer la o clasă de bază cu derivate
-  - [ ] funcții virtuale (pure) apelate prin pointeri de bază din clasa de mai sus, constructori virtuali (clone)
-    - minim o funcție virtuală va fi **specifică temei** (e.g. nu simple citiri/afișări)
-  - [ ] apelarea constructorului din clasa de bază din constructori din derivate
-  - [ ] smart pointers
-  - [ ] `dynamic_cast`
-- [ ] suprascris cc/op= pentru copieri/atribuiri corecte, copy and swap
-- [ ] excepții
-  - [ ] ierarhie proprie cu baza `std::exception` sau derivată din `std::exception`; minim 2 clase pentru erori specifice
-  - [ ] utilizare cu sens: de exemplu, `throw` în constructor, `try`/`catch` în `main`
-- [ ] funcții și atribute `static`
-- [ ] STL
-- [ ] cât mai multe `const`
-- [ ] la sfârșit: commit separat cu adăugarea unei noi derivate fără a modifica restul codului
-- [ ] tag de `git`: de exemplu `v0.2`
+-[ ] La inceput iti alegi premiile pe care vrei sa le primesti daca vei castiga. Daca pierzi, vei primi totusi un premiu de consolare!
 
 ## Tema 3
 
