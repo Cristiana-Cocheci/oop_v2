@@ -217,7 +217,6 @@ void Game::increase_score(int x) {
 
 bool Game::run()
 {
-    bool win=0;
     while(!quit)
     {
     input();
