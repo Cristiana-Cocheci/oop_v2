@@ -34,7 +34,7 @@ void Meniu::open() {
     } while (ok);
 }
 void Meniu::run(){
-    auto& joc=Game::get_game(12,h,player_name);
+    auto& joc=Game::get_game(10,h,player_name);
     std::cout<<"\nYou know what's the fun part?\nYou get to choose your own prizes!\n";
     std::cout<<"Today I am Santa Claus, write me a list of up to 10 items of whatever you like!\n Could be a lucky number, an extravagant prime, a cat, a dog, a sum of money\n";
     std::cout<<"If you don't choose 10 items, I'm gonna send you surprises!\nType the numer of prizes, the type of prize (\"number\" or \"object\") and then your prizes below. All the prizes have to be the same type";
@@ -44,37 +44,37 @@ void Meniu::run(){
         int l;
         std::string type;
         rlutil::setColor(rlutil::WHITE);
-        std::cin>> l>>type;
+        std::cin>> l;
         rlutil::setColor(rlutil::LIGHTCYAN);
         if(l>10 || l<0){
             std::cout<<"wrong length!\n";
             ok=true;
         }
-        else if(type!="number" && type!="object"){
-            std::cout<<"wrong type, read instructions again\n";
-            ok=true;
-        }
-        else{
-            if(type=="number"){
-                std::vector<float> p;
-                for(int i=0;i<l;i++){
-                    float x;
-                    std::cin>>x;
-                    p.push_back(x);
-                }
-                Prizes<float> sume(p,l);
+        else {
+            std::cin>>type;
+            while (type != "number" && type != "object") {
+                std::cout << "wrong type, read instructions again\n";
+                std::cin>>type;
             }
-            else{
-                std::vector<std::string> p;
-                for(int i=0;i<l;i++){
-                    std::string x;
-                    std::cin>>x;
-                    p.push_back(x);
+                if (type == "number") {
+                    std::vector<float> p;
+                    for (int i = 0; i < l; i++) {
+                        float x;
+                        std::cin >> x;
+                        p.push_back(x);
+                    }
+                    Prizes<float> sume(p, l);
+                } else {
+                    std::vector<std::string> p;
+                    for (int i = 0; i < l; i++) {
+                        std::string x;
+                        std::cin >> x;
+                        p.push_back(x);
+                    }
+                    Prizes<std::string> sume(p, l);
                 }
-                Prizes<std::string> sume(p,l);
-            }
-        }
 
+        }
     }
     while(ok);
     std::cout<<"when you think you're ready, type \"start\" and press enter.\n";

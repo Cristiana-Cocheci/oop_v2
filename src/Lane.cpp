@@ -44,6 +44,11 @@ void Lane::move() {
 }
 
 int Lane::trackPosition(int pos) {
+    if(pos>=10 ||pos<0)
+    {
+        std::cerr<<pos;
+        throw nu_incepem("\nCeva in neregula la Lane?");
+    }
     return cars[pos];
 }
 

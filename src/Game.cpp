@@ -41,7 +41,10 @@ Game::Game(int w, int h, const std::string& pn)
                 try {
                     map.push_back(LaneFactory::RightFastLane());
                 }
-                catch (eroare_lane &err) { std::cout << err.what() << "\n"; }
+                catch (eroare_lane &err) {
+                    std::cout << err.what() << "\n";
+                    throw nu_incepem("Jocul nu poate incepe");
+                }
 
             }
             else if (i % 27 == 9) {
