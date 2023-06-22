@@ -14,7 +14,7 @@ template <typename T> class Prizes{
     static bool ok;
 public:
     Prizes(){}
-    Prizes(const std::vector<T> &arr);
+    explicit Prizes(const std::vector<T> &arr);
     static std::vector<T> get_p();
     int getsize();
 
